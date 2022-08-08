@@ -1,0 +1,21 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /yokult
+  
+spring:
+  # DataSource
+  datasource:
+    url: jdbc:mysql://localhost:3306/yokult?serverTimezone=Asia/Taipei
+    username: root
+    password: password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  # SessionFactory
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+      dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
