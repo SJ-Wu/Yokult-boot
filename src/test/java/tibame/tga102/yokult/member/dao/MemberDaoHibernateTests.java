@@ -20,13 +20,13 @@ public class MemberDaoHibernateTests {
 	@Autowired
 	private MemberDao memberDao;
 	
-	@Test
-	public void testSelectAll() {
-		List<Member> list = memberDao.selectAll();
-		for (Member m:list) {
-			System.out.println(m);
-		}
-	}
+//	@Test
+//	public void testSelectAll() {
+//		List<Member> list = memberDao.selectAll();
+//		for (Member m:list) {
+//			System.out.println(m);
+//		}
+//	}
 	
 	@Test
 	public void testInsert() {
@@ -41,5 +41,15 @@ public class MemberDaoHibernateTests {
 		insert.setMemBirth(sqlDate);
 		Integer result = memberDao.insert(insert);
 		System.out.println(result);
+	}
+	
+	@Test
+	public void testQuery() {
+		String query = "吳";
+		System.out.println("========TestQuery========");
+		List<Member> list = memberDao.queryByMemberName(query);
+		for (Member m: list) {
+			System.out.println(m);
+		}
 	}
 }

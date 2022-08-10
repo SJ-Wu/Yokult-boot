@@ -1,7 +1,6 @@
 package tibame.tga102.yokult.member.service;
 
 import java.util.List;
-import java.util.Map;
 
 import tibame.tga102.yokult.member.vo.Member;
 
@@ -18,7 +17,7 @@ public interface MemberService {
 
 	Integer remove(Member member);
 	
-	List<Member> searchByType(Map<String, String>map);
+	List<Member> query(String memEmail, String memID, String memName);
 	
 	boolean emailVerification(String code, Member member);
 }

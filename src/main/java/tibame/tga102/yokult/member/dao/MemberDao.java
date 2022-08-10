@@ -13,15 +13,15 @@ public interface MemberDao {
 
 	List<Member> selectAll();
 
-	List<Member> selectByMemberName(String string);
+	List<Member> queryByMemberID(String memID);
+	
+	List<Member> queryByMemberEmail(String memEmail);
+	
+	List<Member> queryByMemberName(String memName);
 
 	Member selectByMemberID(String account);
 
 	Member selectByMemberIdAndPassword(Member member);
-
-	Member selectByMemberEmail(String string);
-
-	Member selectByMemberCellPhone(String string);
 	
     Integer updateStatus(Member member);
 

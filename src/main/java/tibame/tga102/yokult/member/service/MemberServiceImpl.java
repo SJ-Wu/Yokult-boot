@@ -1,10 +1,8 @@
 package tibame.tga102.yokult.member.service;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
 
@@ -89,7 +87,7 @@ public class MemberServiceImpl implements MemberService {
 		if (status > 0) {
 			System.out.println("send email");
 			String to = member.getMemEmail();
-			String subject = "Yokult會員認證信件";
+//			String subject = "Yokult會員認證信件";
 
 			String verifysite = "http://localhost:8080/yokult/api/0.02/member/verify?memID=" + member.getMemID()
 					+ "&code=" + authCode;
@@ -111,16 +109,14 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public List<Member> searchByType(Map<String, String> map) {
-		List<Member> list = new ArrayList<Member>();
-		if (map.containsKey("memID")) {
-			list.add(dao.selectByMemberID(map.get("memID")));
-		} else if (map.containsKey("memEmail")) {
-			list.add(dao.selectByMemberEmail(map.get("memEmail")));
-		} else if (map.containsKey("memCellPhone")) {
-			list.add(dao.selectByMemberCellPhone(map.get("memCellPhone")));
-		} else if (map.containsKey("memName")) {
-			return dao.selectByMemberName(map.get("memName"));
+	public List<Member> query(String memEmail, String memID, String memName) {
+		List<Member> list = null;
+		if (memID != null) {
+			list = dao.queryByMemberID(memID);
+		} else if (memEmail != null) {
+			list = dao.queryByMemberEmail(memEmail);
+		} else if (memName != null) {
+			list = dao.queryByMemberName(memName);
 		}
 		return list;
 	}

@@ -74,24 +74,6 @@ public class MemberDaoHibernate implements MemberDao {
 	}
 
 	@Override
-	public List<Member> selectByMemberName(String string) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Member selectByMemberEmail(String string) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Member selectByMemberCellPhone(String string) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Integer updateStatus(Member member) {
 		return this.getSession().createQuery(
 			"update Member " + 
@@ -100,6 +82,27 @@ public class MemberDaoHibernate implements MemberDao {
 		.setParameter("newStatus", member.getMemStatus())
 		.setParameter("updateId", member.getMemID())
 		.executeUpdate();
+	}
+
+	@Override
+	public List<Member> queryByMemberID(String memID) {
+		String query = "%"+memID+"%";
+		String hql = "from Member where memID like :query ";
+		return this.getSession().createQuery(hql, Member.class).setParameter("query", query).list();
+	}
+
+	@Override
+	public List<Member> queryByMemberEmail(String memEmail) {
+		String query = "%"+memEmail+"%";
+		String hql = "from Member where memEmail like :query ";
+		return this.getSession().createQuery(hql, Member.class).setParameter("query", query).list();
+	}
+	
+	@Override
+	public List<Member> queryByMemberName(String memName) {
+		String query = "%"+memName+"%";
+		String hql = "from Member where memName like :query ";
+		return this.getSession().createQuery(hql, Member.class).setParameter("query", query).list();
 	}
 
 }
