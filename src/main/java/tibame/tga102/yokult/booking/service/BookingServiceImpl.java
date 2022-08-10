@@ -12,12 +12,11 @@ import java.util.Optional;
 
 import javax.naming.NamingException;
 
-import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import tibame.tga102.yokult.booking.dao.DoctorCheckinDAO;
-import tibame.tga102.yokult.booking.dao.DoctorCheckinDAOImpl;
 import tibame.tga102.yokult.booking.dao.DoctorDAO;
 import tibame.tga102.yokult.booking.dao.DoctorScheduleDAO;
 import tibame.tga102.yokult.booking.dao.PatientDAO;
@@ -26,6 +25,7 @@ import tibame.tga102.yokult.booking.vo.Doctor;
 import tibame.tga102.yokult.booking.vo.DoctorSchedule;
 import tibame.tga102.yokult.booking.vo.Patient;
 @Service
+@Transactional
 public class BookingServiceImpl implements BookingService  {
 	@Autowired
 	private PatientDAO patientDAOImpl;
@@ -35,9 +35,6 @@ public class BookingServiceImpl implements BookingService  {
 	
 	@Autowired
 	private DoctorScheduleDAO doctorScheduleDAOImpl;
-	
-//	@Autowired
-//	private DoctorCheckinDAOImpl doctorCheckinDAOImpl;
 	
 	@Autowired
 	private DoctorCheckinDAO doctorCheckinDAO;
@@ -51,8 +48,10 @@ public class BookingServiceImpl implements BookingService  {
 		List<CheckinVO> list = doctorCheckinDAO.findAll();
 		
 		System.out.println("findAll = " + list);
-		Optional<CheckinVO> o = list.stream().filter(v -> v.getDoctorId().equals(doctor.getDoctorId()))
-			.sorted(Comparator.comparing(CheckinVO::getBookingNumber)).findFirst();
+		Optional<CheckinVO> o = list.stream()
+				.filter(v -> v.getDoctorId().equals(doctor.getDoctorId()))
+				.sorted(Comparator.comparing(CheckinVO::getBookingNumber))
+				.findFirst();
 		if(o.isPresent()) {
 			return o.get();
 		}
@@ -67,11 +66,12 @@ public class BookingServiceImpl implements BookingService  {
 //		return null;
 	}
 	
-	//儲存叫號
+	//儲存叫號 CheckinCondition=1 才儲存叫號
 	@Override
 	public void putcheckin(Patient patient) {
 		patient.setCheckinCondition(1);
 		List<Patient> list =  patientDAOImpl.selectPatientByIdcardAndCheckinCondition(patient);
+		System.out.println("[service putcheckin list]" + list);
 		if(list != null) {
 			for(Patient vo : list) {
 				if(Date.valueOf(LocalDate.now()).equals(vo.getBookingDate())) {
@@ -79,8 +79,9 @@ public class BookingServiceImpl implements BookingService  {
 					checkinVO.setBookingNumber(vo.getBookingNumber());
 					checkinVO.setDoctorId(vo.getDoctorId());
 					checkinVO.setPatientIdcard(vo.getPatientIdcard());
+
 					doctorCheckinDAO.save(checkinVO);
-					//					doctorCheckinDAOImpl.insertOne(vo);
+		//					doctorCheckinDAOImpl.insertOne(vo);
 
 				
 				}
@@ -90,7 +91,7 @@ public class BookingServiceImpl implements BookingService  {
 	
 	//報到 patient checkin方法 成功回傳1(影響筆數) 失敗回傳0 或 -1
 	@Override
-	public int patientCheckIn(Patient patient) throws NamingException {
+	public int patientCheckIn(Patient patient) {
 		patient.setCheckinCondition(1);
 		patient.setBookingDate(Date.valueOf(LocalDate.now()));
 		int result = patientDAOImpl.updatePatientCheckinConditionByBookingDate(patient);
@@ -106,13 +107,12 @@ public class BookingServiceImpl implements BookingService  {
 		//	patient.setBookingDate();
 		int result = patientDAOImpl.updatePatientCheckinConditionByBookingDate(patient);
 		System.out.println("change patientCheckIn condition rowcount= "+ result);
-		
 		return result;
 	}
 	//組裝會員編號和要booking的時段，並回傳是否新增成功 把object資料拿出來
 	//在這邊計算掛幾號
 	@Override
-	public int setPatientBooking(Patient patient) throws NamingException {
+	public int setPatientBooking(Patient patient)  {
 		//先查詢是否有掛號日期
 		if(patient.getBookingDate() == null) {
 			return -1;

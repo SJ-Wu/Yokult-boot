@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.naming.NamingException;
 
+import tibame.tga102.yokult.booking.vo.CheckinVO;
 import tibame.tga102.yokult.booking.vo.Doctor;
 import tibame.tga102.yokult.booking.vo.DoctorConvert;
 import tibame.tga102.yokult.booking.vo.Patient;
@@ -28,6 +29,6 @@ public interface DoctorService {
 
 	DoctorConvert selectOne(Doctor doctor);
 
-	String nextOne(Doctor doctor);
+	CheckinVO nextOne(Doctor doctor);
 
 }

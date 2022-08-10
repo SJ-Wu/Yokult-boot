@@ -125,8 +125,10 @@ public class PatientDAOImpl implements PatientDAO {
 						.setParameter("id", patient.getPatientIdcard())
 						.setParameter("day", patient.getBookingDate())
 						.uniqueResult();
-		
+		System.out.println("==> vo at patientDAO"+ vo);
+		System.out.println("==> patient.getCheckinCondition()="+ patient.getCheckinCondition());
 		if(vo != null) {
+//			this.getSession().merge(patient);
 			vo.setCheckinCondition(patient.getCheckinCondition());
 			return 1;
 		}

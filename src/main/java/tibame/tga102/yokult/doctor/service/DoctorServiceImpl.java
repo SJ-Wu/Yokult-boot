@@ -3,29 +3,30 @@ package tibame.tga102.yokult.doctor.service;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.naming.NamingException;
 
 import org.bson.Document;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import tibame.tga102.yokult.booking.dao.DoctorCheckinDAOImpl;
+import tibame.tga102.yokult.booking.dao.DoctorCheckinDAO;
 import tibame.tga102.yokult.booking.dao.DoctorDAO;
-import tibame.tga102.yokult.booking.dao.DoctorDAOImpl;
 import tibame.tga102.yokult.booking.dao.DoctorScheduleDAO;
-import tibame.tga102.yokult.booking.dao.DoctorScheduleDAOImpl;
 import tibame.tga102.yokult.booking.dao.PatientDAO;
-import tibame.tga102.yokult.booking.dao.PatientDAOImpl;
+import tibame.tga102.yokult.booking.vo.CheckinVO;
 import tibame.tga102.yokult.booking.vo.Doctor;
 import tibame.tga102.yokult.booking.vo.DoctorConvert;
 import tibame.tga102.yokult.booking.vo.DoctorSchedule;
 import tibame.tga102.yokult.booking.vo.Patient;
 @Service
+@Transactional
 public class DoctorServiceImpl implements DoctorService {
 	@Autowired
 	private PatientDAO patientDAOImpl;
@@ -34,26 +35,39 @@ public class DoctorServiceImpl implements DoctorService {
 	
 	@Autowired
 	private DoctorScheduleDAO doctorScheduleDAOImpl;
+	
 	@Autowired
-	private DoctorCheckinDAOImpl doctorCheckinDAOImpl;
+	private DoctorCheckinDAO doctorCheckinDAO;
 	
 	public DoctorServiceImpl() {
-
 		}
 
 	@Override
-	public String nextOne(Doctor doctor) {
-		Document docdel = doctorCheckinDAOImpl.selectOne(doctor);
-		if(docdel != null) {
-			doctorCheckinDAOImpl.deleteOne(docdel);
+	public CheckinVO nextOne(Doctor doctor) {
+		Optional<CheckinVO> checkinVO = findFirstOne(doctor);
+		if(checkinVO.isPresent()) {
+			doctorCheckinDAO.delete(checkinVO.get());
 		}
-		Document doc = doctorCheckinDAOImpl.selectOne(doctor);
-		if(doc != null) {
-			doc.append("msg", "nextOne success");
-			return doc.toJson();
+		
+		Optional<CheckinVO> checkinVONext = findFirstOne(doctor);
+		if(checkinVONext.isPresent()) {
+			
+//			"msg", "nextOne success"
+			return checkinVONext.get();
 		}
 		return null;
 	}
+	
+	
+	public Optional<CheckinVO> findFirstOne(Doctor doctor){
+		return doctorCheckinDAO.findAll()
+			 	.stream()
+			 	.filter(v -> v.getDoctorId() == doctor.getDoctorId())
+			 	.sorted(Comparator.comparing(CheckinVO::getBookingNumber))
+			 	.findFirst();
+	}
+	
+	
 	//回傳一個醫師資料
 	@Override
 	public DoctorConvert selectOne(Doctor doctor) {
@@ -71,9 +85,6 @@ public class DoctorServiceImpl implements DoctorService {
 		}
 		return null;
 	}
-	
-	
-
 	
 	@Override
 	public List<Doctor> getDoctorAll() {

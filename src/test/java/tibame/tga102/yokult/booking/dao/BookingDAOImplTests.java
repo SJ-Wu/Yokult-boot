@@ -25,6 +25,7 @@ public class BookingDAOImplTests {
 		patient.setBookingDate(java.sql.Date.valueOf("2025-01-01"));
 		patient.setBookingNumber(1);
 		patient.setDoctorId(1);
+		patient.setAmPm("晚");
 		int result = patientDao.insertBookingIntoPatient(patient);
 		System.out.println(result);
 	}

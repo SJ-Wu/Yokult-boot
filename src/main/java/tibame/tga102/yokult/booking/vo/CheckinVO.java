@@ -12,7 +12,6 @@ public class CheckinVO {
 	private Integer bookingNumber;
 	private Integer doctorId;
 	
-	
 	public CheckinVO() {
 		super();
 	}
