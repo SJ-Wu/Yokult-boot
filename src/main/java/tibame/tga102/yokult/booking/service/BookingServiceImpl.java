@@ -4,53 +4,68 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.naming.NamingException;
 
 import org.bson.Document;
-import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import tibame.tga102.yokult.booking.dao.DoctorCheckinDAO;
 import tibame.tga102.yokult.booking.dao.DoctorCheckinDAOImpl;
 import tibame.tga102.yokult.booking.dao.DoctorDAO;
-import tibame.tga102.yokult.booking.dao.DoctorDAOImpl;
 import tibame.tga102.yokult.booking.dao.DoctorScheduleDAO;
-import tibame.tga102.yokult.booking.dao.DoctorScheduleDAOImpl;
 import tibame.tga102.yokult.booking.dao.PatientDAO;
-import tibame.tga102.yokult.booking.dao.PatientDAOImpl;
+import tibame.tga102.yokult.booking.vo.CheckinVO;
 import tibame.tga102.yokult.booking.vo.Doctor;
 import tibame.tga102.yokult.booking.vo.DoctorSchedule;
 import tibame.tga102.yokult.booking.vo.Patient;
-
+@Service
 public class BookingServiceImpl implements BookingService  {
-	//例外通常是放在service層 才能夠決定導向到哪裡去 不要在DAOimpl把exception處理掉
-	//p174		
+	@Autowired
 	private PatientDAO patientDAOImpl;
-	private DoctorDAO doctorDAOImpl;
-	private DoctorScheduleDAO doctorScheduleDAOImpl;
-	private DoctorCheckinDAOImpl doctorCheckinDAOImpl;
 	
-	public BookingServiceImpl(SessionFactory sessionFactory) throws NamingException {
-		patientDAOImpl = new PatientDAOImpl(sessionFactory);
-		doctorDAOImpl = new DoctorDAOImpl(sessionFactory);
-		doctorScheduleDAOImpl = new DoctorScheduleDAOImpl(sessionFactory);
-		doctorCheckinDAOImpl = new DoctorCheckinDAOImpl();
-		
+	@Autowired
+	private DoctorDAO doctorDAOImpl;
+	
+	@Autowired
+	private DoctorScheduleDAO doctorScheduleDAOImpl;
+	
+//	@Autowired
+//	private DoctorCheckinDAOImpl doctorCheckinDAOImpl;
+	
+	@Autowired
+	private DoctorCheckinDAO doctorCheckinDAO;
+	
+	public BookingServiceImpl(){
 	}
 	
 	@Override
-	public String nowNum(Doctor doctor) {
-		Document doc = doctorCheckinDAOImpl.selectOne(doctor);
-		if(doc != null) {
-			doc.append("msg", "nowNum success");
-			return doc.toJson();
+	public CheckinVO nowNum(Doctor doctor) {
+		System.out.println("findAll start");
+		List<CheckinVO> list = doctorCheckinDAO.findAll();
+		
+		System.out.println("findAll = " + list);
+		Optional<CheckinVO> o = list.stream().filter(v -> v.getDoctorId().equals(doctor.getDoctorId()))
+			.sorted(Comparator.comparing(CheckinVO::getBookingNumber)).findFirst();
+		if(o.isPresent()) {
+			return o.get();
 		}
+		
 		return null;
+		
+//		Document doc = doctorCheckinDAOImpl.selectOne(doctor);
+//		if(doc != null) {
+//			doc.append("msg", "nowNum success");
+//			return doc.toJson();
+//		}
+//		return null;
 	}
-	
-
 	
 	//儲存叫號
 	@Override
@@ -60,7 +75,14 @@ public class BookingServiceImpl implements BookingService  {
 		if(list != null) {
 			for(Patient vo : list) {
 				if(Date.valueOf(LocalDate.now()).equals(vo.getBookingDate())) {
-					doctorCheckinDAOImpl.insertOne(vo);
+					CheckinVO checkinVO = new CheckinVO();
+					checkinVO.setBookingNumber(vo.getBookingNumber());
+					checkinVO.setDoctorId(vo.getDoctorId());
+					checkinVO.setPatientIdcard(vo.getPatientIdcard());
+					doctorCheckinDAO.save(checkinVO);
+					//					doctorCheckinDAOImpl.insertOne(vo);
+
+				
 				}
 			}
 		}

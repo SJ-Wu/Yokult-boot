@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.naming.NamingException;
 
+import tibame.tga102.yokult.booking.vo.CheckinVO;
 import tibame.tga102.yokult.booking.vo.Doctor;
 import tibame.tga102.yokult.booking.vo.Patient;
 
@@ -42,7 +43,7 @@ public interface BookingService {
 	//回傳一個已報到 指定時間 身分證 的病歷
 	Map<String, String> showOneChart(Patient patient);
 
-	String nowNum(Doctor doctor);
+	CheckinVO nowNum(Doctor doctor);
 
 	void putcheckin(Patient patient);
 	

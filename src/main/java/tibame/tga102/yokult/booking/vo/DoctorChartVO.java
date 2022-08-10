@@ -2,6 +2,8 @@ package tibame.tga102.yokult.booking.vo;
 
 import java.io.Serializable;
 
+import org.springframework.stereotype.Component;
+@Component
 public class DoctorChartVO implements Serializable {
 	private Integer doctorId;
 	private String memID;

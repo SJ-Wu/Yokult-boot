@@ -3,6 +3,8 @@ package tibame.tga102.yokult.booking.vo;
 import java.io.Serializable;
 import java.sql.Date;
 
+import org.springframework.stereotype.Component;
+@Component
 public class PatientBookingVO implements Serializable{
 
 	private Date date1;

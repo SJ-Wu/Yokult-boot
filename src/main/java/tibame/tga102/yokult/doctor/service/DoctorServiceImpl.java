@@ -11,6 +11,8 @@ import javax.naming.NamingException;
 
 import org.bson.Document;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import tibame.tga102.yokult.booking.dao.DoctorCheckinDAOImpl;
 import tibame.tga102.yokult.booking.dao.DoctorDAO;
@@ -23,18 +25,20 @@ import tibame.tga102.yokult.booking.vo.Doctor;
 import tibame.tga102.yokult.booking.vo.DoctorConvert;
 import tibame.tga102.yokult.booking.vo.DoctorSchedule;
 import tibame.tga102.yokult.booking.vo.Patient;
-
+@Service
 public class DoctorServiceImpl implements DoctorService {
+	@Autowired
 	private PatientDAO patientDAOImpl;
+	@Autowired
 	private DoctorDAO doctorDAOImpl;
+	
+	@Autowired
 	private DoctorScheduleDAO doctorScheduleDAOImpl;
+	@Autowired
 	private DoctorCheckinDAOImpl doctorCheckinDAOImpl;
 	
-	public DoctorServiceImpl(SessionFactory sessionFactory) throws NamingException {
-		patientDAOImpl = new PatientDAOImpl(sessionFactory);
-		doctorDAOImpl = new DoctorDAOImpl(sessionFactory);
-		doctorScheduleDAOImpl = new DoctorScheduleDAOImpl(sessionFactory);
-		doctorCheckinDAOImpl = new DoctorCheckinDAOImpl();
+	public DoctorServiceImpl() {
+
 		}
 
 	@Override

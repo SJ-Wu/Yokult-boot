@@ -2,22 +2,15 @@ package tibame.tga102.yokult.booking.vo;
 
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+@Component
 public class DoctorConvert {
-//	@Column(name="DOCTOR_ALPHABET")
 	private String doctorAlphabet;
-//	@Id
-//	@GeneratedValue(strategy = GenerationType.IDENTITY)
-//	@Column(name = "DOCTOR_ID")
 	private Integer doctorId;
-//	@Column(name = "DOCTOR_NAME")
 	private String doctorName;
-//	@Column(name = "DOCTOR_PHOTO")
 	private String doctorPhoto;
-//	@Column(name = "DOCTOR_CERTIFICATE")
 	private String doctorCertificate;
-//	@Column(name = "DOCTOR_EMAIL")
 	private String doctorEmail;
-//	@Column(name = "DOCTOR_PASSWARD")
 	private String doctorPassword;
 	
 	private List<DoctorSchedule> listOfDoctorSchedule;
