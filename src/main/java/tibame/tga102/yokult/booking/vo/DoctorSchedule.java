@@ -1,4 +1,4 @@
-package web.booking.vo;
+package tibame.tga102.yokult.booking.vo;
 
 import java.io.Serializable;
 import java.sql.Date;
