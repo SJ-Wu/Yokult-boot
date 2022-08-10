@@ -54,7 +54,6 @@ public class MemberDaoHibernate implements MemberDao {
 	public Integer update(Member member) {
 		Member update = (Member)this.getSession().get(Member.class, member.getMemID());
 		if (update != null) {
-			update.setMemEmail(member.getMemEmail());
 			update.setMemName(member.getMemName());
 			update.setMemCellPhone(member.getMemCellPhone());
 			update.setMemBirth(member.getMemBirth());
@@ -94,7 +93,6 @@ public class MemberDaoHibernate implements MemberDao {
 
 	@Override
 	public Integer updateStatus(Member member) {
-		System.out.println(member);
 		return this.getSession().createQuery(
 			"update Member " + 
 			"set memStatus = :newStatus " +

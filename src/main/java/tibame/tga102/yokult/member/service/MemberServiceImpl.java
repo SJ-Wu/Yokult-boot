@@ -48,11 +48,12 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public Integer remove(Member member) {
+		member.setMemStatus("DELETE");
 		if (!checkValue(member.getMemID())) {
 			System.out.println("帳號錯誤");
 			return -1;
 		}
-		return dao.delete(member);
+		return dao.updateStatus(member);
 	}
 
 	@Override
@@ -90,13 +91,13 @@ public class MemberServiceImpl implements MemberService {
 			String to = member.getMemEmail();
 			String subject = "Yokult會員認證信件";
 
-			String verifysite = "http://localhost:8080/Proj_Yokult/api/0.01/member/verify?memID=" + member.getMemID()
+			String verifysite = "http://localhost:8080/yokult/api/0.02/member/verify?memID=" + member.getMemID()
 					+ "&code=" + authCode;
 			String messageText = "Hello! " + member.getMemName() + " 請點擊連結以驗證信箱: " + verifysite + "\n";
 			System.out.println("Receiver:" + to);
 			System.out.println(messageText);
-			MailService mailService = new MailService();
-			mailService.sendMail(to, subject, messageText);
+//			MailService mailService = new MailService();
+//			mailService.sendMail(to, subject, messageText);
 		}
 		return status;
 	}
@@ -133,6 +134,7 @@ public class MemberServiceImpl implements MemberService {
 		}
 		return false;
 	}
+
 }
 
 class MailService {
@@ -141,7 +143,7 @@ class MailService {
 	private final static String PORT = "587";
 	private final static String STARTTLE_ENABLE = "true";
 	private final static String SENDER = "nickwu0301@gmail.com";
-	private final static String PASSWORD = "hxzukliwisyfapvd";
+	private final static String PASSWORD = "";
 
 //  設定傳送郵件:至收信人的Email信箱,Email主旨,Email內容
 	public void sendMail(String recipients, String mailSubject, String mailBody) {
