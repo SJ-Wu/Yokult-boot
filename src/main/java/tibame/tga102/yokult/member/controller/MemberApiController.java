@@ -3,7 +3,6 @@ package tibame.tga102.yokult.member.controller;
 import java.net.URI;
 import java.util.List;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import tibame.tga102.yokult.member.service.MemberService;
@@ -61,11 +59,11 @@ public class MemberApiController {
 	@CrossOrigin()
 	public ResponseEntity<?> selectByCondition(String memEmail, String memID, String memName) {
 //		System.out.println(request.getRequestURI());
-		System.out.println(memEmail);
-		System.out.println(memID);
-		System.out.println(memName);
+//		System.out.println(memEmail);
+//		System.out.println(memID);
+//		System.out.println(memName);
 		List<Member> members = memberService.query(memEmail, memID, memName);
-		System.out.println(members);
+//		System.out.println(members);
 		if (members != null) {
 			ResponseEntity<List<Member>> response = ResponseEntity
 					.ok()
@@ -82,7 +80,7 @@ public class MemberApiController {
 	}
 	
 	@PostMapping(path = { "/login" })
-	@CrossOrigin(origins = "https://sj-wu.github.io/")
+	@CrossOrigin()
 	public ResponseEntity<?> login(@RequestBody Member member) {
 		Member login = memberService.login(member);
 		memberResponse.setMember(login);
@@ -171,14 +169,14 @@ public class MemberApiController {
 	}
 	
 	@PutMapping(path= {"/modify"})
-	@CrossOrigin(origins = "https://sj-wu.github.io/")
+	@CrossOrigin()
 	public ResponseEntity<?> modify(@RequestBody Member member) {
 		System.out.println(member);
 		Integer status = memberService.modify(member);
 		if (status > 0) {
-			memberResponse.setMsg("member modified");
+			memberResponse.setMsg("success");
 		} else {
-			memberResponse.setMsg("member modified failed");
+			memberResponse.setMsg("fail");
 		}
 		ResponseEntity<MemberResponse> response = ResponseEntity
 				.ok()
