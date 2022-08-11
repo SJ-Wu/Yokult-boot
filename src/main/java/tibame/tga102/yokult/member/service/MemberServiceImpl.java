@@ -31,6 +31,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import tibame.tga102.yokult.member.dao.MemberDao;
 import tibame.tga102.yokult.member.vo.Member;
+import tibame.tga102.yokult.util.YokultConstants;
 
 @Service
 @Transactional
@@ -69,7 +70,8 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public Member login(Member member) {
+	public String login(Member member) {
+		String jwtToken = null;
 		String account = member.getMemID();
 		String password = member.getMemPassword();
 //		System.out.println(account + " " + password);
@@ -80,11 +82,11 @@ public class MemberServiceImpl implements MemberService {
 		member = dao.selectByMemberIdAndPassword(member);
 		if (member != null) {
 			Date expireDate = new Date(System.currentTimeMillis() + 30 * 60 * 1000);
-			String jwtToken = Jwts.builder().setSubject(member.getMemID()).setExpiration(expireDate)
-					.signWith(SignatureAlgorithm.HS512, "tga102yokult").compact();
+			jwtToken = Jwts.builder().setSubject(member.getMemID()).setExpiration(expireDate)
+					.signWith(SignatureAlgorithm.HS512, YokultConstants.JWTKEY).compact();
 			System.out.println("jwtToken: " + jwtToken);
 		}
-		return member;
+		return jwtToken;
 	}
 
 	@Override

@@ -11,7 +11,7 @@ public interface MemberService {
 	
 	Integer register(Member member);
 
-	Member login(Member member);
+	String login(Member member);
 
 	Integer modify(Member member);
 

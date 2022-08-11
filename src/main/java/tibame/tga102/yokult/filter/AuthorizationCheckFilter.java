@@ -17,9 +17,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import tibame.tga102.yokult.util.YokultConstants;
 
 public class AuthorizationCheckFilter extends OncePerRequestFilter{
 
+	//JWT implementation referenced from https://ithelp.ithome.com.tw/articles/10272035
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
@@ -27,10 +29,11 @@ public class AuthorizationCheckFilter extends OncePerRequestFilter{
 			System.out.println("Need AUTH");
 			String authorHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 			String bearer = "Bearer";
+			System.out.println(authorHeader);
 			if(authorHeader!= null && authorHeader.startsWith(bearer)){
                 try{
                 String token = authorHeader.substring(bearer.length());
-                Claims claims = Jwts.parser().setSigningKey("tga102yokult")
+                Claims claims = Jwts.parser().setSigningKey(YokultConstants.JWTKEY)
                 .parseClaimsJws(token).getBody();
 
                 System.out.println("JWT payload:"+claims.toString());
@@ -51,6 +54,8 @@ public class AuthorizationCheckFilter extends OncePerRequestFilter{
             }
 		} else {
 			System.out.println("Login path");
+			String authorHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+			System.out.println(authorHeader);
 			filterChain.doFilter(request, response);
 		}
 	}

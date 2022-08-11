@@ -55,6 +55,25 @@ public class MemberApiController {
 		}
 	}
 	
+	@GetMapping("/{id}")
+	@CrossOrigin
+	public ResponseEntity<?> getMemberInfo(@PathVariable(name="id") String memID){
+		Member info = memberService.getOneByID(memID);
+		if (info != null) {
+			ResponseEntity<Member> response = ResponseEntity
+					.ok()
+					.contentType(MediaType.APPLICATION_JSON)
+					.body(info);
+			return response;
+		} else {
+			// 204 (No content)
+			ResponseEntity<?> response = ResponseEntity
+					.noContent()
+					.build();
+			return response;
+		}
+	}
+	
 	@GetMapping(path= {"/query"})
 	@CrossOrigin()
 	public ResponseEntity<?> selectByCondition(String memEmail, String memID, String memName) {
@@ -82,14 +101,12 @@ public class MemberApiController {
 	@PostMapping(path = { "/login" })
 	@CrossOrigin()
 	public ResponseEntity<?> login(@RequestBody Member member) {
-		Member login = memberService.login(member);
-		memberResponse.setMember(login);
-		memberResponse.setMsg("success");
-		if (login != null) {
-			URI uri = URI.create("/api/0.02/member/"+login.getMemID());
+		String jwtToken = memberService.login(member);
+		memberResponse.setMsg(jwtToken);
+		if (jwtToken != null) {
 			// 201 (Created)
 			ResponseEntity<MemberResponse> response = ResponseEntity
-					.created(uri)
+					.ok()
 					.contentType(MediaType.APPLICATION_JSON)
 					.body(memberResponse);
 			return response;
