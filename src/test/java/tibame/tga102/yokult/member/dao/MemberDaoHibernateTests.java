@@ -20,17 +20,18 @@ public class MemberDaoHibernateTests {
 	@Autowired
 	private MemberDao memberDao;
 	
-//	@Test
-//	public void testSelectAll() {
-//		List<Member> list = memberDao.selectAll();
-//		for (Member m:list) {
-//			System.out.println(m);
-//		}
-//	}
+	@Test
+	public void testSelectAll() {
+		System.out.println("========TestListAll========");
+		List<Member> list = memberDao.selectAll();
+		for (Member m:list) {
+			System.out.println(m);
+		}
+	}
 	
 	@Test
 	public void testInsert() {
-		// Insert practice.
+		System.out.println("========TestRegister========");
 		Member insert = new Member();
 		insert.setMemID("TGA1993");
 		insert.setMemPassword("123");
@@ -44,9 +45,19 @@ public class MemberDaoHibernateTests {
 	}
 	
 	@Test
+	public void testselectByMemberIdAndPassword() {
+		System.out.println("========TestLogin========");
+		Member select = new Member();
+		select.setMemID("TGA1993");
+		select.setMemPassword("123");
+		Member result = memberDao.selectByMemberIdAndPassword(select);
+		System.out.println(result);
+	}
+	
+	@Test
 	public void testQuery() {
-		String query = "吳";
 		System.out.println("========TestQuery========");
+		String query = "吳";
 		List<Member> list = memberDao.queryByMemberName(query);
 		for (Member m: list) {
 			System.out.println(m);

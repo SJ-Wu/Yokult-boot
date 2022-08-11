@@ -1,4 +1,5 @@
 package tibame.tga102.yokult.member.service;
+
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
@@ -22,9 +23,12 @@ import javax.mail.internet.MimeMultipart;
 import javax.mail.internet.MimeUtility;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import tibame.tga102.yokult.member.dao.MemberDao;
 import tibame.tga102.yokult.member.vo.Member;
 
@@ -74,6 +78,12 @@ public class MemberServiceImpl implements MemberService {
 			return null;
 		}
 		member = dao.selectByMemberIdAndPassword(member);
+		if (member != null) {
+			Date expireDate = new Date(System.currentTimeMillis() + 30 * 60 * 1000);
+			String jwtToken = Jwts.builder().setSubject(member.getMemID()).setExpiration(expireDate)
+					.signWith(SignatureAlgorithm.HS512, "tga102yokult").compact();
+			System.out.println("jwtToken: " + jwtToken);
+		}
 		return member;
 	}
 
@@ -83,6 +93,7 @@ public class MemberServiceImpl implements MemberService {
 		GenAuthCode genAuthCode = new GenAuthCode();
 		String authCode = genAuthCode.generate();
 		member.setMemStatus(authCode);
+		// Insert in persistence.
 		Integer status = dao.insert(member);
 		if (status > 0) {
 			System.out.println("send email");
@@ -126,7 +137,7 @@ public class MemberServiceImpl implements MemberService {
 		String verifyCode = dao.selectByMemberID(member.getMemID()).getMemStatus();
 		if (verifyCode.equals(code)) {
 			member.setMemStatus("APPROVED");
-			return (dao.updateStatus(member) > 0)?true:false;
+			return (dao.updateStatus(member) > 0) ? true : false;
 		}
 		return false;
 	}
