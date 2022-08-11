@@ -39,6 +39,11 @@ public class DoctorChartVO implements Serializable {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	@Override
+	public String toString() {
+		return "DoctorChartVO [doctorId=" + doctorId + ", memID=" + memID + ", patientIdcard=" + patientIdcard
+				+ ", bookingDate=" + bookingDate + "]";
+	}
 	
 	
 }

@@ -48,11 +48,8 @@ public class DoctorServiceImpl implements DoctorService {
 		if(checkinVO.isPresent()) {
 			doctorCheckinDAO.delete(checkinVO.get());
 		}
-		
 		Optional<CheckinVO> checkinVONext = findFirstOne(doctor);
 		if(checkinVONext.isPresent()) {
-			
-//			"msg", "nextOne success"
 			return checkinVONext.get();
 		}
 		return null;
@@ -114,7 +111,7 @@ public class DoctorServiceImpl implements DoctorService {
 	
 	//回傳某醫師所有病人MEMID
 	@Override
-	public Set<String> returnDrPatientIdcard(Doctor doctor) throws NamingException  {
+	public Set<String> returnDrPatientIdcard(Doctor doctor)  {
 		
 		List<Patient> list = filterPatient(doctor);
 		if(list.size() != 0) {
@@ -130,7 +127,7 @@ public class DoctorServiceImpl implements DoctorService {
 	
 	//回傳某醫師某病人的   已報到日期
 	@Override
-	public List<Date> returnDrPatientDates(Doctor doctor, Patient patient) throws NamingException {
+	public List<Date> returnDrPatientDates(Doctor doctor, Patient patient)  {
 		//回傳某醫師的已報到所有病人資料
 		List<Patient> list = filterPatient(doctor);
 		if(list.size() != 0) {
@@ -147,12 +144,13 @@ public class DoctorServiceImpl implements DoctorService {
 	
 	//回傳某醫師某病人已報到日期 的病歷資料
 	@Override
-	public Patient returnDrPatientChart(Doctor doctor, Patient patient) throws NamingException {
+	public Patient returnDrPatientChart(Doctor doctor, Patient patient)  {
 		//過濾同樣dr 有報到的病人們的list
 		List<Patient> list = filterPatient(doctor);
 		if(list!= null) {
 			for(Patient vo : list) {
-				if(vo.getPatientIdcard().equals(patient.getPatientIdcard()) && vo.getBookingDate().equals(patient.getBookingDate())) {
+				System.out.println("[DoctorService] returnDrPatientChart");
+				if(vo.getPatientIdcard().equals(patient.getPatientIdcard()) && (vo.getBookingDate().toString()).equals((patient.getBookingDate().toString()))) {
 					System.out.println("service: get Chart success");
 					return vo;
 				}
@@ -161,10 +159,9 @@ public class DoctorServiceImpl implements DoctorService {
 		return null;
 	}
 	
-	
 	//過濾同樣dr 有報到的病人們 但名字重複 只顯示已經報到過的名單
 	@Override
-	public List<Patient> filterPatient(Doctor doctor) throws NamingException{
+	public List<Patient> filterPatient(Doctor doctor) {
 		int drId = doctor.getDoctorId();
 		List<Patient> list = patientDAOImpl.selectAll();
 		if(list.size()!=0) {
@@ -173,12 +170,12 @@ public class DoctorServiceImpl implements DoctorService {
 					list.remove(i);
 				};
 			}
-			System.out.println("service: filterDrPatient success =" + list);
 			return list;
 		}
 		return null;
 	}
 	
+	@Override
 	public int saveDrSchedule(List<DoctorSchedule> list) {
 		int result = 0;
 		for(DoctorSchedule doctorSchedule : list) {
