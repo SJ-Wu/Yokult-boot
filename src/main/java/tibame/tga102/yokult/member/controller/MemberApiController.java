@@ -22,7 +22,7 @@ import tibame.tga102.yokult.member.service.MemberService;
 import tibame.tga102.yokult.member.vo.Member;
 import tibame.tga102.yokult.member.vo.MemberResponse;
 
-
+@CrossOrigin
 @RestController
 @RequestMapping(path = { "/api/0.02/member" })
 public class MemberApiController {
@@ -37,7 +37,6 @@ public class MemberApiController {
 	private HttpServletRequest request;
 
 	@GetMapping
-	@CrossOrigin()
 	public ResponseEntity<?> selectAll(){
 		List<Member> members = memberService.getAll();
 		if (members != null) {
@@ -55,10 +54,10 @@ public class MemberApiController {
 		}
 	}
 	
-	@GetMapping("/{id}")
-	@CrossOrigin
+	@GetMapping(path= {"/{id}"})
 	public ResponseEntity<?> getMemberInfo(@PathVariable(name="id") String memID){
 		Member info = memberService.getOneByID(memID);
+		System.out.println(info);
 		if (info != null) {
 			ResponseEntity<Member> response = ResponseEntity
 					.ok()
@@ -75,7 +74,6 @@ public class MemberApiController {
 	}
 	
 	@GetMapping(path= {"/query"})
-	@CrossOrigin()
 	public ResponseEntity<?> selectByCondition(String memEmail, String memID, String memName) {
 //		System.out.println(request.getRequestURI());
 //		System.out.println(memEmail);
@@ -99,7 +97,6 @@ public class MemberApiController {
 	}
 	
 	@PostMapping(path = { "/login" })
-	@CrossOrigin()
 	public ResponseEntity<?> login(@RequestBody Member member) {
 		String jwtToken = memberService.login(member);
 		memberResponse.setMsg(jwtToken);
@@ -120,7 +117,6 @@ public class MemberApiController {
 	}
 	
 	@PostMapping(path= {"/register"})
-	@CrossOrigin(origins = "https://sj-wu.github.io/")
 	public ResponseEntity<?> register(@RequestBody Member member) {
 		if (memberService.getOneByID(member.getMemID()) != null) {
 			String json = "{'message': 'repeated'}";
@@ -153,7 +149,6 @@ public class MemberApiController {
 	}
 	
 	@GetMapping(path= {"/verify"})
-	@CrossOrigin(origins = "https://sj-wu.github.io/")
 	public ResponseEntity<?> verify(String code, String memID){
 		member.setMemID(memID);
 		if (memberService.emailVerification(code, member)) {
@@ -169,7 +164,6 @@ public class MemberApiController {
 	}
 	
 	@DeleteMapping(path= {"/delete/{id}"})
-	@CrossOrigin(origins = "https://sj-wu.github.io/")
 	public ResponseEntity<?> delete(@PathVariable(name="id") String memID) {
 		member.setMemID(memID);
 		Integer status = memberService.remove(member);
@@ -186,7 +180,6 @@ public class MemberApiController {
 	}
 	
 	@PutMapping(path= {"/modify"})
-	@CrossOrigin()
 	public ResponseEntity<?> modify(@RequestBody Member member) {
 		System.out.println(member);
 		Integer status = memberService.modify(member);
