@@ -1,7 +1,6 @@
 package tibame.tga102.yokult.filter;
 
 import java.io.IOException;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,8 +33,8 @@ public class AuthorizationCheckFilter extends OncePerRequestFilter {
 			response.setStatus(HttpServletResponse.SC_OK);
 			filterChain.doFilter(request, response);
 		} else {
-			if ((!request.getServletPath().equals("/api/0.02/member/login"))
-					&& (!request.getServletPath().equals("/api/0.02/member/register"))) {
+			if ((!request.getServletPath().equals(YokultConstants.MEMBERAPI + "/login"))
+					&& (!request.getServletPath().equals(YokultConstants.MEMBERAPI + "/register"))) {
 				System.out.println("Need AUTH");
 				String authorHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 				String bearer = "Bearer";
@@ -64,8 +63,6 @@ public class AuthorizationCheckFilter extends OncePerRequestFilter {
 				}
 			} else {
 				System.out.println("Login path");
-				String authorHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-				System.out.println(authorHeader);
 				filterChain.doFilter(request, response);
 			}
 		}
