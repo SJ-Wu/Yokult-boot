@@ -1,4 +1,4 @@
-package tibame.tga102.yokult.booking.service;
+package tibame.tga102.yokult.booking.servlet;
 
 import java.awt.Color;
 import java.awt.Graphics;

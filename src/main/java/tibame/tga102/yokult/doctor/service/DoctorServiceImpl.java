@@ -4,14 +4,13 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-import javax.naming.NamingException;
-
-import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -72,8 +71,10 @@ public class DoctorServiceImpl implements DoctorService {
 		DoctorConvert doctorConvert = new DoctorConvert();
 		if(vo != null) {
 		byte[] photo = vo.getDoctorPhoto();
+		System.out.println("[DoctorService] getDoctorPhoto byte[]" + photo);
 		if(photo != null) {
 			String photostr = Base64.getEncoder().encodeToString(photo);
+			System.out.println("[DoctorService] selectOne photostr" + photostr);
 			doctorConvert.setDoctorPhoto(photostr);
 		}
 		doctorConvert.setDoctorId(vo.getDoctorId());

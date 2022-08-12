@@ -17,11 +17,13 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,7 +37,6 @@ import tibame.tga102.yokult.booking.vo.DoctorSchedule;
 import tibame.tga102.yokult.booking.vo.Patient;
 import tibame.tga102.yokult.doctor.service.DoctorService;
 
-//@WebServlet("/api/0.01/doctor/*")
 @Controller
 @ResponseBody
 @CrossOrigin
@@ -170,13 +171,13 @@ public class DoctorServlet extends HttpServlet {
 	public Map<String, Object> loadDr(@RequestBody Doctor doctor){
 			DoctorConvert vo = doctorServiceImpl.selectOne(doctor);
 			if (vo != null) {
-				return toFrontEnd("load Dr success", "doctor", vo);
+				return toFrontEnd("load Dr success", "doctor", removeNullProperty(vo));
 			} else {
 				return toFrontEnd("load Dr failure");
 			}
 	}
 	
-	@PostMapping(path = {"nextOne"})
+	@PostMapping(path = {"/nextOne"})
 	public Map<String, Object> nextOne(@RequestBody Doctor doctor){
 		try {
 			CheckinVO checkinVO = doctorServiceImpl.nextOne(doctor);
@@ -191,9 +192,13 @@ public class DoctorServlet extends HttpServlet {
 	}
 	
 	//寫到這裡
-	@PostMapping(path= {"updateDrSchedule"})
-	public Map<String, Object> updateDrSchedule(@RequestBody DoctorConvert doctorConvert){
+	@PutMapping(path= {"/updateDrSchedule"})
+	public Map<String, Object> updateDrSchedule(@RequestBody DoctorConvert doctorConvert, BindingResult bindingResult ){
 		System.out.println("[Test] get doctor convert");
+		if(bindingResult != null && bindingResult.hasFieldErrors("doctorSchedule")) {
+			System.out.println(bindingResult.getFieldError("doctorSchedule"));
+			
+		}
 		List<DoctorSchedule> list = doctorConvert.getListOfDoctorSchedule();
 		int result = doctorServiceImpl.saveDrSchedule(list);
 		if(result > 0) {
@@ -215,52 +220,6 @@ public class DoctorServlet extends HttpServlet {
 		map.put("msg", msg);
 		return map;
 	}
-
-//	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//		setHeaders(response);
-//		request.setCharacterEncoding("UTF-8");
-
-
-
-
-
-	
-
-	
-//	//儲存醫師資料
-//	private JsonObject saveDr(Gson gson, Reader br) {
-//		System.out.println("servlet: save dr start");
-//		DoctorServiceImpl doctorServiceImpl = null;
-//		try {
-//			doctorServiceImpl = new DoctorServiceImpl(HibernateUtil.getSessionFactory());
-//		} catch (NamingException e) {
-//			e.printStackTrace();
-//		}
-//		DoctorConvert doctorConvert = gson.fromJson(br, DoctorConvert.class);
-//		JsonObject jsonObject = new JsonObject();
-//		//過濾
-//		if(doctorConvert.getDoctorName().length() == 0) {
-//			jsonObject.addProperty("msg","no name");
-//			return jsonObject;
-//		}
-//		if(doctorConvert.getDoctorPhoto() == null) {
-//			jsonObject.addProperty("msg","no photo");
-//			return jsonObject;
-//		}
-//		
-//		int result = doctorServiceImpl.updateDr(doctorConverter(doctorConvert));
-//		if (result == 1) {
-//			jsonObject.addProperty("msg", "updateDr success");
-//		} else {
-//			jsonObject.addProperty("msg", "updateDr failure");
-//		}
-//		return jsonObject;
-//	}
-
-	
-
-	
-
 	
 	private Doctor doctorConverter(DoctorConvert doctorConvert) {
 		Doctor doctor = new Doctor();
@@ -275,6 +234,15 @@ public class DoctorServlet extends HttpServlet {
 //		doctor.setDoctorPhoto(doctorConvert.getDoctorPhoto().getBytes()); //bad idea
 		return doctor;
 	}
+	
+	private Map<String, String> removeNullProperty(DoctorConvert doctorConvert){
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("doctorId", doctorConvert.getDoctorId().toString());
+		map.put("doctorName", doctorConvert.getDoctorName());
+		map.put("doctorPhoto", doctorConvert.getDoctorPhoto());
+		return map;
+	}
+	
 	
 	@Override
 	protected void doOptions(HttpServletRequest req, HttpServletResponse response) throws ServletException, IOException {
