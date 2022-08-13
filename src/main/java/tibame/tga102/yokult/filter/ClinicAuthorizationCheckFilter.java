@@ -6,9 +6,11 @@ import java.util.Map;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -19,13 +21,15 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import tibame.tga102.yokult.util.YokultConstants;
 
-public class AuthorizationCheckFilter extends OncePerRequestFilter {
+
+public class ClinicAuthorizationCheckFilter extends OncePerRequestFilter {
 
 	// JWT implementation referenced from
 	// https://ithelp.ithome.com.tw/articles/10272035
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
+		System.out.println("Filter");
 		// CORS Option byPass: 
 		// Referenced: https://medium.com/@yovan/%E9%82%A3%E4%BA%9B%E7%B6%93%E6%AD%B7%E9%81%8E%E7%9A%84-cors-%E8%A0%A2%E5%95%8F%E9%A1%8C-e63576f67066
 		if ("OPTIONS".equals(request.getMethod())) {
@@ -33,8 +37,8 @@ public class AuthorizationCheckFilter extends OncePerRequestFilter {
 			response.setStatus(HttpServletResponse.SC_OK);
 			filterChain.doFilter(request, response);
 		} else {
-			if ((!request.getServletPath().equals(YokultConstants.MEMBERAPI + "/login"))
-					&& (!request.getServletPath().equals(YokultConstants.MEMBERAPI + "/register"))) {
+			if ((!request.getServletPath().equals(YokultConstants.MEMBER_API + "/login"))
+					&& (!request.getServletPath().equals(YokultConstants.MEMBER_API + "/register"))) {
 				System.out.println("Need AUTH");
 				String authorHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 				String bearer = "Bearer";

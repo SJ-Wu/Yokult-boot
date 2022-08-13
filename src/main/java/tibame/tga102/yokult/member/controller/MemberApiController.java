@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,9 +20,8 @@ import tibame.tga102.yokult.member.vo.Member;
 import tibame.tga102.yokult.member.vo.MemberResponse;
 import tibame.tga102.yokult.util.YokultConstants;
 
-@CrossOrigin
 @RestController
-@RequestMapping(path = { YokultConstants.MEMBERAPI })
+@RequestMapping(path = { YokultConstants.MEMBER_API })
 public class MemberApiController {
 
 	@Autowired
@@ -33,19 +31,7 @@ public class MemberApiController {
 	@Autowired
 	private Member member;
 
-	@GetMapping
-	public ResponseEntity<?> selectAll() {
-		List<Member> members = memberService.getAll();
-		if (members != null) {
-			ResponseEntity<List<Member>> response = ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON)
-					.body(members);
-			return response;
-		} else {
-			// 204 (No content)
-			ResponseEntity<?> response = ResponseEntity.noContent().build();
-			return response;
-		}
-	}
+	
 
 	@GetMapping(path = { "/{id}" })
 	public ResponseEntity<?> getMemberInfo(@PathVariable(name = "id") String memID) {
@@ -61,19 +47,6 @@ public class MemberApiController {
 		}
 	}
 
-	@GetMapping(path = { "/query" })
-	public ResponseEntity<?> selectByCondition(String memEmail, String memID, String memName) {
-		List<Member> members = memberService.query(memEmail, memID, memName);
-		if (members != null) {
-			ResponseEntity<List<Member>> response = ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON)
-					.body(members);
-			return response;
-		} else {
-			// 204 (No content)
-			ResponseEntity<?> response = ResponseEntity.noContent().build();
-			return response;
-		}
-	}
 
 	@PostMapping(path = { "/login" })
 	public ResponseEntity<?> login(@RequestBody Member member) {
