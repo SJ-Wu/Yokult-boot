@@ -1,7 +1,6 @@
 package tibame.tga102.yokult.member.controller;
 
 import java.net.URI;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
