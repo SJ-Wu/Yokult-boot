@@ -2,13 +2,10 @@ package tibame.tga102.yokult.product.service.impl;
 
 import java.util.List;
 
-import javax.naming.NamingException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import tibame.tga102.yokult.product.dao.ProductDao;
-import tibame.tga102.yokult.product.dao.impl.ProductDaoImpl;
 import tibame.tga102.yokult.product.service.ProductService;
 import tibame.tga102.yokult.product.vo.Product;
 

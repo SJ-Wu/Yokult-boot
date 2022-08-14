@@ -6,4 +6,5 @@ public class YokultConstants {
 	public static final String MEMBER_ADMIN_API = "/api/0.02/admin/member";
 	public static final String STAFF_API = "/api/0.02/staff";
 	public static final String TOPIC_API = "/api/0.01/topic";
+	public static final String PRODUCT_API = "/api/0.01/product";
 }
