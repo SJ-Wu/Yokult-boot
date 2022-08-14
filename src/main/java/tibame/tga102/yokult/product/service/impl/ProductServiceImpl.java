@@ -4,18 +4,21 @@ import java.util.List;
 
 import javax.naming.NamingException;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import tibame.tga102.yokult.product.dao.ProductDao;
 import tibame.tga102.yokult.product.dao.impl.ProductDaoImpl;
 import tibame.tga102.yokult.product.service.ProductService;
 import tibame.tga102.yokult.product.vo.Product;
 
 
-
+@Service
 public class ProductServiceImpl implements ProductService {
+	@Autowired
 	private ProductDao dao;
 
-	public ProductServiceImpl() throws NamingException {
-		dao = new ProductDaoImpl();
+	public ProductServiceImpl() {
 	}
 
 	@Override
@@ -28,5 +31,8 @@ public class ProductServiceImpl implements ProductService {
 		dao.update(product);
 	}
 
-	
+	@Override
+	public Integer add(Product product) {
+		return dao.insert(product);
+	}
 }

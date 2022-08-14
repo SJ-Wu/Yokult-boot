@@ -1,20 +1,41 @@
 package tibame.tga102.yokult.product.vo;
 
-import java.io.Serializable;
-import java.util.Arrays;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
+import org.springframework.stereotype.Component;
 
-public class Product implements Serializable {
-
-	private static final long serialVersionUID = 1L;
-	
+@Entity
+@Table(name = "product")
+public class Product{
+	@Id
+	@Column(name = "proid")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer proID;
+	
+	@Column(name = "proname")
 	private String proName;
+	
+	@Column(name = "prostock")
 	private Integer proStock;
+	
+	@Column(name = "proprice")
 	private Integer proPrice;
+
+	@Column(name = "prospecs")
 	private String proSpecs;
+	
+	@Column(name = "probrand")
 	private String proBrand;
+	
+	@Column(name = "propicture")
 	private String proPicture;
+	
+	@Column(name = "procategory")
 	private String proCategory;
 	
 	@Override
@@ -88,8 +109,25 @@ public class Product implements Serializable {
 		this.proCategory = proCategory;
 	}
 
-		
+	public Product(Integer proID, String proName, Integer proStock, Integer proPrice, String proSpecs, String proBrand,
+			String proPicture, String proCategory) {
+		super();
+		this.proID = proID;
+		this.proName = proName;
+		this.proStock = proStock;
+		this.proPrice = proPrice;
+		this.proSpecs = proSpecs;
+		this.proBrand = proBrand;
+		this.proPicture = proPicture;
+		this.proCategory = proCategory;
 	}
+
+	public Product() {
+		super();
+	}
+
+		
+}
 
 
 
