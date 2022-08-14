@@ -20,6 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -51,7 +53,7 @@ public class BookingServlet extends HttpServlet {
         super();
     }
     
-  //回傳醫師上班時間
+    //回傳醫師上班時間
     @GetMapping(path = {"/drSchedule"})
     public Map<String, Object> drSchedule(@RequestParam String date1, @RequestParam String date2, @RequestParam String doctorId) {
     	String date1sql = date1.replace("/", "-");
@@ -90,51 +92,105 @@ public class BookingServlet extends HttpServlet {
 		}
 		return toFrontEnd(" Exception failure bookingQuery");
     }
+    
+    //查詢會員看過診日期
+    @GetMapping(path= {"/chartQuery"})
+    public Map<String, Object> chartQuery(@RequestParam String memID){
+    		Patient patient = new Patient();
+    		patient.setMemID(memID);
+
+    		try {
+				List<Date> list =  bookingServiceImpl.getChartDates(patient);
+				if(list != null && list.size() != 0) {
+					return toFrontEnd("return date success", "list", list);
+				} else {
+					return toFrontEnd("you don't see doctor yet");
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+    		return toFrontEnd("Exception chartQuery failure");
+    }
+    
+	//新增checkin方法
+    @PostMapping(path= {"/patientCheckin"})
+    public Map<String, Object> patientCheckin(@RequestBody Patient patient){
+    	int result = 0;
+		try {
+			String pID = bookingServiceImpl.getIdcardBymemID(patient);
+			if(!pID.equals(patient.getPatientIdcard())) {
+				return toFrontEnd("not correct IDcard");
+			}
+			result = bookingServiceImpl.patientCheckIn(patient);
+			if (result == 1) {
+				return toFrontEnd("checkin success");
+			} else {
+				return toFrontEnd("you have no booking today");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return toFrontEnd("Exception patientCheckin failure");
+    }
+
+//新增掛號資料方法 
+    @PostMapping(path = {"/receiveBookingRequest"})
+    public Map<String, Object> receiveBookingRequest(@RequestBody Patient patient){
+		try {
+
+    		if((patient.getPatientIdcard().length() == 0)) {
+    			return toFrontEnd("IDCARD didn't key in");
+    		}
+    		
+    		if((patient.getBookingDate() == null)) {
+    			return toFrontEnd("TIME didn't key in");
+    		}
+    		
+    		if(!patient.getPatientIdcard().matches("^[A-Z]{1}[1-2]{1}[0-9]{8}$")) {
+    			return toFrontEnd("PatientIdcard wrong format");
+    		}
+    		
+			int bookingNumber = bookingServiceImpl.setPatientBooking(patient);
+    		if(bookingNumber != -1) {
+    			return toFrontEnd("receiveBookingRequest success", "bookingNumber", bookingNumber);
+    		}
+		} catch (Exception e) {
+    			System.out.println("receiveBookingRequest failure");
+    			e.printStackTrace();
+    		}
+		return toFrontEnd("receiveBookingRequest failure");
+    }
+    
+    @PostMapping(path= {"/chartQuery"})
+    public Map<String, Object> chartQuery(){
+//    	//回傳就診紀錄日期查詢 的醫師和病歷Map
+//    	private JsonObject chartQuery(Gson gson, Reader br) {
+//    		Patient patient = gson.fromJson(br, Patient.class);
+//    		System.out.println("servlet: chartQuery for: " + patient.getMemID());
+//    		JsonObject jsonObject = new JsonObject();
+//    		BookingService bookingServiceImpl = null;
+//    		try {
+//    			bookingServiceImpl = new BookingServiceImpl(HibernateUtil.getSessionFactory());
+//    		} catch (NamingException e) {
+//    			e.printStackTrace();
+//    		}
+//    		Map<String, String> map =  bookingServiceImpl.showOneChart(patient);
+//    		if(map != null && map.size() != 0) {
+//    			jsonObject.addProperty("msg", "return chart success");
+//    			jsonObject.add("map", gson.toJsonTree(map, new TypeToken<Map<String, String>>() {}.getType()).getAsJsonObject());
+//    		} else {
+//    			jsonObject.addProperty("msg", "you don't see doctor yet");
+//    		}
+//    		return jsonObject;
+//    	}
     	
-//	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//		setHeaders(response);
-//		request.setCharacterEncoding("UTF-8");
-//		String pathInfo = request.getPathInfo();
-//		String[] infos = pathInfo.split("/");
-//		//開啟跨網域，html才能接收到servlet傳出的東西
-//		BufferedReader br = request.getReader();
-//		PrintWriter out = response.getWriter();
-//		
-//
-//		} else if("chartQuery".equals(infos[1])) {
-////查詢會員看過診日期/api/0.01/booking/bookingQuery get
-//			out.append(gson.toJson(chartQueryDate(gson, request)));
-//			br.close();
-//			out.close();
-//			return;
-//		}
-//
-//		br.close();
-//		out.close();
-//	}
-//
-//	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//		request.setCharacterEncoding("UTF-8");
-//		String pathInfo = request.getPathInfo();
-//		String[] infos = pathInfo.split("/");
-//		//開啟跨網域，html才能接收到servlet傳出的東西
-//		setHeaders(response);
-//		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
-//		BufferedReader br = request.getReader();
-//		PrintWriter out = response.getWriter();
-//
-////新增checkin /api/0.01/booking/patientCheckin
-//		if ("patientCheckin".equals(infos[1])) {
-//			out.append(gson.toJson(patientCheckin(gson, br)));
-//			br.close();
-//			out.close();
-//			return;
-//		} else if("receiveBookingRequest".equals(infos[1])) {
-////新增掛號/api/0.01/booking/receiveBookingRequest
-//			out.append(gson.toJson(receiveBookingRequest(gson, br)));			
-//			br.close();
-//			out.close();
-//			return;
+    }
+    
+
+    
+ 
+    
+
 //		} else if("chartQuery".equals(infos[1])) {
 ////回傳就診紀錄日期查詢的醫師和病歷/api/0.01/booking/chartQuery
 //			out.append(gson.toJson(chartQuery(gson, br)));			
@@ -189,68 +245,8 @@ public class BookingServlet extends HttpServlet {
 //	}
 //	
 //	
-//	//新增checkin方法
-//	private JsonObject patientCheckin(Gson gson, Reader br) {
-//		//讀進資料
-//		Patient patient = gson.fromJson(br, Patient.class);
-//		//patient傳入處理checkin方法
-//		int result = 0;;
-//		JsonObject jsonObject = new JsonObject();
-//		try {
-//			BookingService bookingService = new BookingServiceImpl(HibernateUtil.getSessionFactory());
-//			
-//			String pID = bookingService.getIdcardBymemID(patient);
-//			if(!pID.equals(patient.getPatientIdcard())) {
-//				jsonObject.addProperty("msg", "not correct IDcard");
-//				return jsonObject;
-//			}
-//			result = bookingService.patientCheckIn(patient);
-//		} catch (NamingException e) {
-//			e.printStackTrace();
-//		}
-//		if (result == 1) {
-//			jsonObject.addProperty("msg", "checkin success");
-//		} else {
-//			jsonObject.addProperty("msg", "you have no booking today");
-//		}
-//		return jsonObject;
-//	}
-//	
-//	//新增掛號資料方法 
-//	private JsonObject receiveBookingRequest(Gson gson, Reader br) {
-//		Patient patient = gson.fromJson(br, Patient.class);
-//		int bookingNumber = 0;
-//		JsonObject jsonObject = new JsonObject();
-////		System.out.println(patient);
-//		if((patient.getPatientIdcard().length() == 0)) {
-//			jsonObject.addProperty("msg", "IDCARD didn't key in");
-//			return jsonObject;
-//		}
-//		if((patient.getBookingDate() == null)) {
-//			jsonObject.addProperty("msg", "TIME didn't key in");
-//			return jsonObject;
-//		}
-//		
-//		if(!patient.getPatientIdcard().matches("^[A-Z]{1}[1-2]{1}[0-9]{8}$")) {
-//			jsonObject.addProperty("msg", "PatientIdcard wrong format");
-//			return jsonObject;
-//		}
-//		try {
-//			BookingService bookingService = new BookingServiceImpl(HibernateUtil.getSessionFactory());
-//			bookingNumber = bookingService.setPatientBooking(patient);
-//		} catch (NamingException e) {
-//			System.out.println("receiveBookingRequest failure");
-//			e.printStackTrace();
-//		}
-//		if(bookingNumber != -1) {
-//			jsonObject.addProperty("msg", "receiveBookingRequest success");
-//			jsonObject.addProperty("bookingNumber", bookingNumber);
-//		} else {
-//			jsonObject.addProperty("msg", "receiveBookingRequest failure");
-//		}
-//		System.out.println("receiveBookingRequest finish");
-//		return jsonObject;
-//	}
+
+
 //	
 //
 //
@@ -274,52 +270,8 @@ public class BookingServlet extends HttpServlet {
 //		return jsonObject;
 //	}
 //	
-//	//回傳就診紀錄查詢的日期
-//	private JsonObject chartQueryDate(Gson gson, HttpServletRequest request) {
-////		Patient patient = gson.fromJson(br, Patient.class);
-//		Patient patient = new Patient();
-//		
-//		String memID = request.getParameter("memID");
-//		System.out.println("servlet: chartQueryDate for: " + memID);
-//		patient.setMemID(memID);
-//		JsonObject jsonObject = new JsonObject();
-//		BookingService bookingServiceImpl = null;
-//		try {
-//			bookingServiceImpl = new BookingServiceImpl(HibernateUtil.getSessionFactory());
-//		} catch (NamingException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		List<Date> list =  bookingServiceImpl.getChartDates(patient);
-//		if(list != null && list.size() != 0) {
-//			jsonObject.addProperty("msg", "return date success");
-//			jsonObject.add("list", gson.toJsonTree(list, new TypeToken<List<Date>>() {}.getType()));
-//		} else {
-//			jsonObject.addProperty("msg", "you don't see doctor yet");
-//		}
-//		return jsonObject;
-//	}
-//	
-//	//回傳就診紀錄日期查詢 的醫師和病歷Map
-//	private JsonObject chartQuery(Gson gson, Reader br) {
-//		Patient patient = gson.fromJson(br, Patient.class);
-//		System.out.println("servlet: chartQuery for: " + patient.getMemID());
-//		JsonObject jsonObject = new JsonObject();
-//		BookingService bookingServiceImpl = null;
-//		try {
-//			bookingServiceImpl = new BookingServiceImpl(HibernateUtil.getSessionFactory());
-//		} catch (NamingException e) {
-//			e.printStackTrace();
-//		}
-//		Map<String, String> map =  bookingServiceImpl.showOneChart(patient);
-//		if(map != null && map.size() != 0) {
-//			jsonObject.addProperty("msg", "return chart success");
-//			jsonObject.add("map", gson.toJsonTree(map, new TypeToken<Map<String, String>>() {}.getType()).getAsJsonObject());
-//		} else {
-//			jsonObject.addProperty("msg", "you don't see doctor yet");
-//		}
-//		return jsonObject;
-//	}
+
+
 	
 	public Map<String, Object> toFrontEnd(String msg, String dataName ,Object data){
 		Map<String, Object> map = new HashMap<String, Object>();

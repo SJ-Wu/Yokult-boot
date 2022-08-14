@@ -184,7 +184,8 @@ public class PatientDAOImpl implements PatientDAO {
 	public List<Patient> selectPatientBymemID(Patient patient) {
 		String hql = "from Patient where memID = :memid";
 		 List<Patient> listOfPatients = this.getSession().createQuery(hql, Patient.class)
-		 	.setParameter("memid", patient.getMemID()).list();
+												 	.setParameter("memid", patient.getMemID())
+												 	.list();
 		 if(listOfPatients.size() != 0) {
 			 return listOfPatients;
 		 }
