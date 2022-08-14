@@ -20,3 +20,13 @@ spring:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
         implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+        
+  # mongoclient
+  data:
+    mongodb:
+      uri: mongodb+srv://vicky:tibame888@cluster0.sw4btkx.mongodb.net/?retryWrites=true&w=majority
+      database: patient
+      
+  # jackson
+  jackson:
+    default-property-inclusion: non-null
