@@ -161,51 +161,50 @@ public class BookingServlet extends HttpServlet {
 		return toFrontEnd("receiveBookingRequest failure");
     }
     
+//  回傳就診紀錄日期查詢 的醫師和病歷Map
     @PostMapping(path= {"/chartQuery"})
-    public Map<String, Object> chartQuery(){
-//    	//回傳就診紀錄日期查詢 的醫師和病歷Map
-//    	private JsonObject chartQuery(Gson gson, Reader br) {
-//    		Patient patient = gson.fromJson(br, Patient.class);
-//    		System.out.println("servlet: chartQuery for: " + patient.getMemID());
-//    		JsonObject jsonObject = new JsonObject();
-//    		BookingService bookingServiceImpl = null;
-//    		try {
-//    			bookingServiceImpl = new BookingServiceImpl(HibernateUtil.getSessionFactory());
-//    		} catch (NamingException e) {
-//    			e.printStackTrace();
-//    		}
-//    		Map<String, String> map =  bookingServiceImpl.showOneChart(patient);
-//    		if(map != null && map.size() != 0) {
-//    			jsonObject.addProperty("msg", "return chart success");
-//    			jsonObject.add("map", gson.toJsonTree(map, new TypeToken<Map<String, String>>() {}.getType()).getAsJsonObject());
-//    		} else {
-//    			jsonObject.addProperty("msg", "you don't see doctor yet");
-//    		}
-//    		return jsonObject;
-//    	}
-    	
+    public Map<String, Object> chartQuery(@RequestBody Patient patient){
+		System.out.println("servlet: chartQuery for: " + patient.getMemID());
+		
+		try {
+			Map<String, String> map =  bookingServiceImpl.showOneChart(patient);
+			if(map != null && map.size() != 0) {
+				return toFrontEnd("return chart success", "map", map);
+			} else {
+				return toFrontEnd("you don't see doctor yet");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return toFrontEnd("Exception chartQuery");
     }
     
-
+    @PostMapping(path = {"nowNum"})
+    public Map<String, Object> nowNum(@RequestBody Doctor doctor){
+    	
+//		try {
+//			BookingService bookingService = new BookingServiceImpl(HibernateUtil.getSessionFactory());
+//			doc = bookingService.nowNum(doctor);
+//		} catch (NamingException e) {
+//			e.printStackTrace();
+//		}
+//		if(doc != null) {
+//			return doc;		
+//		}
+//		JsonObject jsonObject = new JsonObject();
+//		jsonObject.addProperty("msg", "no nowNum");
+//		return gson.toJson(jsonObject);
+//	}
+//	
+//	
+    	return null;
+    }
     
  
     
 
-//		} else if("chartQuery".equals(infos[1])) {
-////回傳就診紀錄日期查詢的醫師和病歷/api/0.01/booking/chartQuery
-//			out.append(gson.toJson(chartQuery(gson, br)));			
-//			br.close();
-//			out.close();
-//			return;
-//		} else if ("nowNum".equals(infos[1])) {
-////回傳目前叫號
-//			out.append(nowNum(gson, br));			
-//			br.close();
-//			out.close();
-//			return;
-//		}
-//			
-//	}
+
+
 //	
 //	@Override
 //	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -227,24 +226,7 @@ public class BookingServlet extends HttpServlet {
 //		}
 //	}
 //	
-//	private String nowNum(Gson gson, Reader br) {
-//		Doctor doctor = gson.fromJson(br, Doctor.class);
-//		String doc = null;
-//		try {
-//			BookingService bookingService = new BookingServiceImpl(HibernateUtil.getSessionFactory());
-//			doc = bookingService.nowNum(doctor);
-//		} catch (NamingException e) {
-//			e.printStackTrace();
-//		}
-//		if(doc != null) {
-//			return doc;		
-//		}
-//		JsonObject jsonObject = new JsonObject();
-//		jsonObject.addProperty("msg", "no nowNum");
-//		return gson.toJson(jsonObject);
-//	}
-//	
-//	
+
 
 
 //	
