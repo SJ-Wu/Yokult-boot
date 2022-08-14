@@ -30,7 +30,7 @@ public class Patient implements Serializable {
 	@Column(name = "booking_date")
 	private java.sql.Date bookingDate;
 	
-	@Column(name = "amPm")
+	@Column(name = "ampm")
 	private String amPm;
 	
 	@Column(name = "booking_number")
