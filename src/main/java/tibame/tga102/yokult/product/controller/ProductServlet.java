@@ -1,4 +1,4 @@
-package tibame.tga102.yokult.product.servlet;
+package tibame.tga102.yokult.product.controller;
 
 import java.io.File;
 import java.io.IOException;
