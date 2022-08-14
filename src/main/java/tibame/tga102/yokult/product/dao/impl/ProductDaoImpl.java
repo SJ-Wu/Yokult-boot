@@ -74,16 +74,26 @@ public class ProductDaoImpl implements ProductDao {
 		}
 		return null;
 	}
-
+@Override
 	public Integer insert(Product product) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Product selectByProductIdAndProduct(Product product) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		String insertStr = "INSERT INTO `product` (`proname`, `prostock`, `proprice`, `prospecs`, `probrand`, `propicture`, `procategory`) VALUES (?,?,?,?,?,?,?);";
+		try {
+			Connection conn = datasource.getConnection();
+			PreparedStatement ps = conn.prepareStatement(insertStr);
+			ps.setString(1, product.getProName());
+			ps.setInt(2, product.getProStock());
+			ps.setInt(3, product.getProPrice());
+			ps.setString(4, product.getProSpecs());
+			ps.setString(5, product.getProBrand());
+			ps.setString(6, product.getProPicture());
+			ps.setString(7, product.getProCategory());
+			return ps.executeUpdate();
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return 0;
+	} 
 
 	@Override
 	public Integer update(Product product) {
@@ -116,27 +126,27 @@ public class ProductDaoImpl implements ProductDao {
 		return 0;
 	}
 
-	public Integer delete(Product product) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+//	public Integer delete(Product product) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 
-	@Override
-	public Integer insert(ProductDao product) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ProductDao selectByProductIdAndProduct(ProductDaoImpl product) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Integer delete(ProductDao product) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+//	@Override
+//	public Integer insert(ProductDao product) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//
+//	@Override
+//	public ProductDao selectByProductIdAndProduct(ProductDaoImpl product) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//
+//	@Override
+//	public Integer delete(ProductDao product) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 
 }
