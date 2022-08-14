@@ -1,8 +1,5 @@
 package tibame.tga102.yokult.booking.servlet;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.Reader;
 import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -15,10 +12,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.bson.json.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,12 +23,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import net.bytebuddy.description.method.MethodDescription.TypeToken;
 import tibame.tga102.yokult.booking.service.BookingService;
-import tibame.tga102.yokult.booking.service.BookingServiceImpl;
+import tibame.tga102.yokult.booking.vo.CheckinVO;
 import tibame.tga102.yokult.booking.vo.Doctor;
 import tibame.tga102.yokult.booking.vo.Patient;
-import tibame.tga102.yokult.booking.vo.PatientBookingVO;
 import tibame.tga102.yokult.doctor.service.DoctorService;
 
 @Controller
@@ -87,7 +82,7 @@ public class BookingServlet extends HttpServlet {
 			} else {
 				return toFrontEnd("you have no unchecked booking data");
 			}
-		} catch (NamingException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return toFrontEnd(" Exception failure bookingQuery");
@@ -181,80 +176,32 @@ public class BookingServlet extends HttpServlet {
     
     @PostMapping(path = {"nowNum"})
     public Map<String, Object> nowNum(@RequestBody Doctor doctor){
-    	
-//		try {
-//			BookingService bookingService = new BookingServiceImpl(HibernateUtil.getSessionFactory());
-//			doc = bookingService.nowNum(doctor);
-//		} catch (NamingException e) {
-//			e.printStackTrace();
-//		}
-//		if(doc != null) {
-//			return doc;		
-//		}
-//		JsonObject jsonObject = new JsonObject();
-//		jsonObject.addProperty("msg", "no nowNum");
-//		return gson.toJson(jsonObject);
-//	}
-//	
-//	
-    	return null;
+    	try {
+			CheckinVO checkinVO = bookingServiceImpl.nowNum(doctor);
+			if(checkinVO != null) {
+				return	toFrontEnd("nowNum success", "checkinVO", checkinVO);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return toFrontEnd("no nowNum");
     }
     
- 
+//取消預約 /api/0.01/booking/cancelBooking
+    @DeleteMapping(path = {"cancelBooking"})
+    public Map<String, Object> cancelBooking(@RequestBody Patient patient){
+// 取消預約
+		try {
+			int result = bookingServiceImpl.patientCancel(patient);
+			if(result == 1) {
+				return toFrontEnd("cancel success");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return toFrontEnd("cancel failure");
+    }
     
-
-
-
-//	
-//	@Override
-//	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//		setHeaders(response);
-//		request.setCharacterEncoding("UTF-8");
-//		String pathInfo = request.getPathInfo();
-//		String[] infos = pathInfo.split("/");
-//		//開啟跨網域，html才能接收到servlet傳出的東西
-//		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
-//		BufferedReader br = request.getReader();
-//		PrintWriter out = response.getWriter();
-//
-////取消預約 /api/0.01/booking/cancelBooking
-//		if ("cancelBooking".equals(infos[1])) {
-//			out.append(gson.toJson(cancelBooking(gson, br)));
-//			br.close();
-//			out.close();
-//			return;
-//		}
-//	}
-//	
-
-
-
-//	
-//
-//
-//
-////取消預約
-//	private JsonObject cancelBooking(Gson gson, Reader br) {
-//		Patient patient = gson.fromJson(br, Patient.class);
-//		JsonObject jsonObject = new JsonObject();
-//		//傳入一筆要改變預約的patient
-//		try {
-//			BookingService bookingServiceImpl = new BookingServiceImpl(HibernateUtil.getSessionFactory());
-//			int result = bookingServiceImpl.patientCancel(patient);
-//			if(result == 1) {
-//				jsonObject.addProperty("msg", "cancel success");
-//				return jsonObject;
-//			}
-//		} catch (NamingException e) {
-//			e.printStackTrace();
-//		}
-//		jsonObject.addProperty("msg", "cancel failure");
-//		return jsonObject;
-//	}
-//	
-
-
-	
 	public Map<String, Object> toFrontEnd(String msg, String dataName ,Object data){
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("msg", msg);

@@ -102,7 +102,7 @@ public class BookingServiceImpl implements BookingService  {
 	
 	//取消預約 傳一筆p進來 回傳int
 	@Override
-	public int patientCancel(Patient patient) throws NamingException {
+	public int patientCancel(Patient patient) {
 		patient.setCheckinCondition(2);
 		//	patient.setBookingDate();
 		int result = patientDAOImpl.updatePatientCheckinConditionByBookingDate(patient);
@@ -144,7 +144,7 @@ public class BookingServiceImpl implements BookingService  {
 	
 	// 組裝日期 醫師有上班的時段和姓名
 	@Override
-	public Map<String, Object> getDoctorScheduleAndDoctorName(Date date1, Date date2,Integer doctorId) throws NamingException {
+	public Map<String, Object> getDoctorScheduleAndDoctorName(Date date1, Date date2,Integer doctorId) {
 		List<DoctorSchedule> listDr = doctorScheduleDAOImpl.selectDoctorSchedule(date1, date2, doctorId);
 		String drName = doctorDAOImpl.selectDoctorNameById(doctorId);
 		
@@ -181,7 +181,7 @@ public class BookingServiceImpl implements BookingService  {
 
 	//回傳病人未報到的所有欄位 加上醫生姓名 有的話回傳list 沒有回null
 	@Override
-	public List<HashMap<String, Object>> getPatientBooking(Patient patient) throws NamingException {
+	public List<HashMap<String, Object>> getPatientBooking(Patient patient) {
 		List<Patient> list = patientDAOImpl.selectPatientBymemID(patient);
 		if (list != null) {
 			for (int i = list.size()-1; i >= 0; i--) {
@@ -213,7 +213,7 @@ public class BookingServiceImpl implements BookingService  {
 	
 	//查詢列出病患身份證字號為? getCheckinCondition=1 的病患所有欄位 的病歷資料
 	@Override
-	public List<Patient> getChart(Patient patient) throws NamingException {
+	public List<Patient> getChart(Patient patient) {
 		patient.setBookingNumber(1);
 		patientDAOImpl.selectPatientBymemID(patient);
 		return null;

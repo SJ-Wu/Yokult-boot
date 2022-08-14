@@ -14,25 +14,25 @@ import tibame.tga102.yokult.booking.vo.Patient;
 public interface BookingService {
 
 	//組裝會員編號和要booking的時段，並回傳是否新增成功 把object資料拿出來
-	public int setPatientBooking(Patient patient) throws NamingException;
+	public int setPatientBooking(Patient patient);
 
 	// 組裝日期 醫師有上班的時段和姓名
-	public Map<String, Object> getDoctorScheduleAndDoctorName(Date date1, Date date2, Integer doctorId) throws NamingException;
+	public Map<String, Object> getDoctorScheduleAndDoctorName(Date date1, Date date2, Integer doctorId) ;
 
 	// Overloading組裝日期 醫師有上班的時段和姓名
 //	public Map<String, Object> getDoctorScheduleAndDoctorName(String date1, String date2, String doctorId) throws NamingException;
 	
 	//patient checkin方法 成功回傳1(影響筆數) 失敗回傳-1
-	public int patientCheckIn(Patient patient)throws NamingException;
+	public int patientCheckIn(Patient patient);
 	
 	//回傳病人未報到的所有欄位 有的話回傳list 沒有回null
-	public List<HashMap<String, Object>> getPatientBooking(Patient patient)throws NamingException;
+	public List<HashMap<String, Object>> getPatientBooking(Patient patient);
 	
 	//取消預約
-	public int patientCancel(Patient patient) throws NamingException;
+	public int patientCancel(Patient patient);
 	
 	//查詢列出病患身份證字號為? getCheckinCondition=1 的病患所有欄位 的病歷資料
-	public List<Patient> getChart(Patient patient) throws NamingException;
+	public List<Patient> getChart(Patient patient) ;
 	
 	//查身分證字號
 	String getIdcardBymemID(Patient patient);
