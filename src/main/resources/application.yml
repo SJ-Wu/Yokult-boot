@@ -30,3 +30,4 @@ spring:
   # jackson
   jackson:
     default-property-inclusion: non-null
+    time-zone: GMT+8
