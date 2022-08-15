@@ -41,10 +41,20 @@ public class TopicDaoHibernateTests {
 	
 	@Test
 	public void testdelete() {
+
 		System.out.println("=======Testdelete");
 		
 	}
 	
+	@Test
+	public void testupdateview() {
+		System.out.println("=======testupdateview");
+		Topic updateview = new Topic();
+		updateview.setTopid(5);
+		updateview.setViews(999);
+		Integer viewresult = topicDao.updateview(updateview);
+		System.out.println("view: " + viewresult);
+	}
 	
 	
 	

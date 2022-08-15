@@ -12,4 +12,6 @@ public interface TopicService {
 	Integer modify(Topic topic);
 
 	Integer remove(Topic topic);
+	
+	Integer updateview(Topic topic);
 }
