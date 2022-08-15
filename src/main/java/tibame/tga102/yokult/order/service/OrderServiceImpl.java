@@ -7,6 +7,10 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.naming.NamingException;
+import javax.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import ecpay.payment.integration.AllInOne;
 import ecpay.payment.integration.domain.AioCheckOutALL;
@@ -14,13 +18,11 @@ import tibame.tga102.yokult.order.dao.OrderDao;
 import tibame.tga102.yokult.order.dao.OrderDaoJDBC;
 import tibame.tga102.yokult.order.vo.Order;
 
+@Service
+@Transactional
 public class OrderServiceImpl implements OrderService {
+	@Autowired
 	private OrderDao orderDao;
-
-	public OrderServiceImpl() throws NamingException {
-		orderDao = new OrderDaoJDBC();
-
-	}
 
 	// 回傳全部
 	@Override

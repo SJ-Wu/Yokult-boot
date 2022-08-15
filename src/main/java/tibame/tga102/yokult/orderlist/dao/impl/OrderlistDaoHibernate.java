@@ -1,4 +1,4 @@
-package tibame.tga102.yokult.orderlist.dao;
+package tibame.tga102.yokult.orderlist.dao.impl;
 
 import java.util.List;
 
@@ -7,6 +7,7 @@ import javax.persistence.PersistenceContext;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
+import tibame.tga102.yokult.orderlist.dao.OrderlistDao;
 import tibame.tga102.yokult.orderlist.vo.Orderlist;
 import tibame.tga102.yokult.orderlist.vo.OrderlistView;
 
@@ -21,28 +22,16 @@ public class OrderlistDaoHibernate implements OrderlistDao{
 	
 	@Override
 	public List<Orderlist> searchOrderlist(Orderlist orderlist) {
-		Orderlist search = (Orderlist)this.getSession().get(Orderlist.class, orderlist.getOrderlistid());
-		if (search != null) {
-			search.setOrderlistid(orderlist.getOrderlistid());
-			search.setProID(orderlist.getProID());
-			search.setProprice(orderlist.getProPrice());
-			search.setQuantity(orderlist.getQuantity());
-			search.setOrdid(orderlist.getOrdid());
-		}
-		return null;
+		return this.getSession().createQuery("from Orderlist where ordid = :searchid", Orderlist.class)
+				.setParameter("searchid", orderlist.getOrdid())
+				.list();
 	}
 
 	@Override
 	public List<OrderlistView> searchOrderlistView(OrderlistView orderlist) {
-		Orderlist search = (Orderlist)this.getSession().get(Orderlist.class, orderlist.getOrderlistid());
-		if (search != null) {
-			search.setOrderlistid(orderlist.getOrderlistid());
-			search.setproID(orderlist.getproid);
-			search.setProprice(orderlist.getProprice());
-			search.setQuantity(orderlist.getQuantity());
-			search.setOrdid(orderlist.getOrdid());
-		}
-		return null;
+		return this.getSession().createQuery("from Orderlist where ordid = :searchid", OrderlistView.class)
+				.setParameter("searchid", orderlist.getOrdid())
+				.list();
 	}
 
 	@Override
@@ -63,8 +52,6 @@ public class OrderlistDaoHibernate implements OrderlistDao{
 
 	@Override
 	public Integer modifyOrderlist(Orderlist orderlist) {
-		
-	
 		return null;
 	}
 	
@@ -72,6 +59,4 @@ public class OrderlistDaoHibernate implements OrderlistDao{
 	public List<Orderlist> selectAll() {
 		return (List<Orderlist>) this.getSession().createQuery("from Orderlist", Orderlist.class).list();
 	}
-	
-
 }
