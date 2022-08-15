@@ -70,7 +70,7 @@ public class MemberApiController {
 			Integer status = memberService.register(member);
 			if (status > 0) {
 				memberResponse.setMsg("success");
-				URI uri = URI.create("/api/0.02/member/");
+				URI uri = URI.create(YokultConstants.MEMBER_API);
 				// 201 (Created)
 				ResponseEntity<MemberResponse> response = ResponseEntity.created(uri)
 						.contentType(MediaType.APPLICATION_JSON).body(memberResponse);
