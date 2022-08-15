@@ -7,4 +7,9 @@ public class YokultConstants {
 	public static final String STAFF_API = "/api/0.02/staff";
 	public static final String TOPIC_API = "/api/0.01/topic";
 	public static final String PRODUCT_API = "/api/0.01/product";
+	public static final String ORDER_API = "/api/0.01/order";
+	public static final String ORDERLIST_API = "/api/0.01/orderlist";
+	public static final String CHECKOUT_API = "/Checkout";
+	public static final String CLIENT_BACK_URL = "http://localhost:8080/Proj_Yokult/clinic/shopping.html";
+	public static final String RETURN_URL = "http://localhost:8080/Proj_Yokult/clinic/shopping.html";
 }

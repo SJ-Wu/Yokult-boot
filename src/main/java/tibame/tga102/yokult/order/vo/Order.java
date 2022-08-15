@@ -2,20 +2,47 @@ package tibame.tga102.yokult.order.vo;
 
 import java.sql.Timestamp;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+@Entity
+@Table (name = "`order`")
 public class Order {
 	//轉hibeernate要額外@transient
+	@Transient
 	private String totalCount;
 	
+	@Id
+	@Column(name = "ordid")
 	private String ordid;
+	
+	@Column(name = "memid")
 	private String memid;
+	
+	@Column(name = "paymethod")
 	private String paymethod;
+	
+	@Column(name = "orderstatus")
 	private String orderstatus;
-	private String addr;
-	private String receipter;
-	private Timestamp shoptime;
-	private String cellphone;
-	private String phone;
 
+	@Column(name = "addr")
+	private String addr;
+	
+	@Column(name = "receipter")
+	private String receipter;
+	
+	@Column(name = "shoptime")
+	private Timestamp shoptime;
+	
+	@Column(name = "cellphone")
+	private String cellphone;
+	
+	@Column(name = "phone")
+	private String phone;
+	
 	@Override
 	public String toString() {
 		return "Order [ordid=" + ordid + ", memid=" + memid + ", paymethod=" + paymethod + ", orderstatus="

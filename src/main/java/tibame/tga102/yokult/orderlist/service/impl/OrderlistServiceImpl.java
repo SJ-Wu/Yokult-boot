@@ -3,20 +3,22 @@ package tibame.tga102.yokult.orderlist.service.impl;
 import java.util.List;
 import java.util.Objects;
 
-import javax.naming.NamingException;
+import javax.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import tibame.tga102.yokult.orderlist.dao.OrderlistDao;
-import tibame.tga102.yokult.orderlist.dao.impl.OrderlistDaoJDBC;
 import tibame.tga102.yokult.orderlist.service.OrderlistService;
 import tibame.tga102.yokult.orderlist.vo.Orderlist;
 import tibame.tga102.yokult.orderlist.vo.OrderlistView;
 
+@Service
+@Transactional
 public class OrderlistServiceImpl implements OrderlistService {
-	private OrderlistDao orderlistDao; // 把 dao 變成一個屬性
 
-	public OrderlistServiceImpl() throws NamingException {
-		orderlistDao = new OrderlistDaoJDBC();
-	}
+	@Autowired
+	private OrderlistDao orderlistDao; // 把 dao 變成一個屬性 
 
 	@Override
 	// 查詢
@@ -40,7 +42,6 @@ public class OrderlistServiceImpl implements OrderlistService {
 	@Override
 	// 新增
 	public Integer insertOrderlist(Orderlist orderlist) {
-		// TODO: validation flow
 		// 1. Check orderid is valid
 		// 2. Check proid is valid
 		return orderlistDao.insertOrderlist(orderlist);
@@ -73,13 +74,14 @@ public class OrderlistServiceImpl implements OrderlistService {
 
 	// 修改
 	public Integer modifyOrderlist(Orderlist orderlist) {
-		if (orderlist != null) {
-			String id = orderlist.getProID();
-			if (checkValue(id)) {
-				return orderlistDao.modifyOrderlist(orderlist);
-
-			}
-		}
+//		if (orderlist != null) {
+//			Integer id = orderlist.getProID();
+//			if (checkValue(id)) 
+//			{
+//				return orderlistDao.modifyOrderlist(orderlist);
+//
+//			}
+//		}
 		return -1;
 
 	}

@@ -201,6 +201,10 @@ values
 (29, '200', '2', '22072900010'),
 (30, '130', '3', '22072900010');
 
+create view v_admin_orderlist (ordid, orderlistid, proname, quantity) 
+as select ordid, orderlistid, proname, quantity from orderlist o join product p where o.proid = p.proid;
+
+
 -- 員工資料
 DROP TABLE IF EXISTS `staff`;
 
@@ -473,7 +477,68 @@ INSERT INTO `yokult`.`topic` (`topid`, `title`, `foreword`, `content`, `sortid`,
 
 
 
+  -- 排班資料
+DROP TABLE IF EXISTS `schedule`;
+
+CREATE TABLE `schedule` (
+  `schedule_date` DATE NOT NULL COMMENT '日期',
+  `morning_shift` VARCHAR(20) NOT NULL COMMENT '早班員工',
+  `night_shift` VARCHAR(20) NOT NULL COMMENT '晚班員工',
+  `day_off` VARCHAR(20) NOT NULL COMMENT '休假員工',
+  PRIMARY KEY (`schedule_date`))
+
+COMMENT = '班表';
+
+INSERT INTO 
+  schedule (schedule_date, morning_shift, night_shift, day_off)
+VALUES
+  ('2022-08-01', 'tga001', 'tga002', 'tga003'),
+  ('2022-08-02', 'tga002', 'tga003', 'tga001'),
+  ('2022-08-03', 'tga003', 'tga001', 'tga002'),
+  ('2022-08-04', 'tga001', 'tga002', 'tga003'),
+  ('2022-08-05', 'tga002', 'tga003', 'tga001'),
+  ('2022-08-06', 'tga003', 'tga001', 'tga002'),
+  ('2022-08-07', 'tga001', 'tga002', 'tga003'),
+  ('2022-08-08', 'tga001', 'tga002', 'tga003'),
+  ('2022-08-09', 'tga002', 'tga003', 'tga001'),
+  ('2022-08-10', 'tga003', 'tga001', 'tga002'),
+  ('2022-08-11', 'tga001', 'tga002', 'tga003'),
+  ('2022-08-12', 'tga002', 'tga003', 'tga001'),
+  ('2022-08-13', 'tga003', 'tga001', 'tga002'),
+  ('2022-08-14', 'tga001', 'tga002', 'tga003'),
+  ('2022-08-15', 'tga001', 'tga002', 'tga003'),
+  ('2022-08-16', 'tga002', 'tga003', 'tga001'),
+  ('2022-08-17', 'tga003', 'tga001', 'tga002'),
+  ('2022-08-18', 'tga001', 'tga002', 'tga003'),
+  ('2022-08-19', 'tga002', 'tga003', 'tga001'),
+  ('2022-08-20', 'tga003', 'tga001', 'tga002'),
+  ('2022-08-21', 'tga001', 'tga002', 'tga003'),
+  ('2022-08-22', 'tga001', 'tga002', 'tga003'),
+  ('2022-08-23', 'tga002', 'tga003', 'tga001'),
+  ('2022-08-24', 'tga003', 'tga001', 'tga002'),
+  ('2022-08-25', 'tga001', 'tga002', 'tga003'),
+  ('2022-08-26', 'tga002', 'tga003', 'tga001'),
+  ('2022-08-27', 'tga003', 'tga001', 'tga002'),
+  ('2022-08-28', 'tga001', 'tga002', 'tga003'),
+  ('2022-08-29', 'tga001', 'tga002', 'tga003'),
+  ('2022-08-30', 'tga002', 'tga003', 'tga001'),
+  ('2022-08-31', 'tga003', 'tga001', 'tga002');
   
+  
+  -- 畫假資料
+  DROP TABLE IF EXISTS `shift_schedule`;
+
+  CREATE TABLE `shift_schedule` (
+`schedule_date` DATE NOT NULL COMMENT '日期',
+  `staff_id` varchar(50) NOT NULL COMMENT '員工編號',
+  `shiftschedule_type_of_leave` varchar(50) NOT NULL COMMENT '假別',
+  `shiftschedule_morningshift_nightshift` varchar(50) NOT NULL COMMENT '早班晚班',
+  FOREIGN KEY (`schedule_date`)
+  REFERENCES `schedule` (`schedule_date`),
+  FOREIGN KEY (`staff_id`)
+  REFERENCES `staff` (`staff_id`))
+  comment = '排班';
+
   
   
   
