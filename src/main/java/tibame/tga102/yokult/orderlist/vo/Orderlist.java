@@ -1,10 +1,27 @@
 package tibame.tga102.yokult.orderlist.vo;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "`orderlist`")
 public class Orderlist {
+	@Id
+	@Column(name = "orderlistid")
 	private Integer orderlistid; // 訂單商品編號
-	private String proID;// 商品ID
+	
+	@Column(name = "proid")
+	private Integer proID;// 商品ID
+	
+	@Column(name = "proprice")
 	private Integer proPrice;// 商品價格
+	
+	@Column(name = "quantity")
 	private Integer quantity;// 訂購數量
+	
+	@Column(name ="ordid")
 	private String ordid;// 訂單
 
 	@Override
@@ -21,11 +38,11 @@ public class Orderlist {
 		this.orderlistid = orderlistid;
 	}
 
-	public String getProID() {
+	public Integer getProID() {
 		return proID;
 	}
 
-	public void setProID(String proID) {
+	public void setProID(Integer proID) {
 		this.proID = proID;
 	}
 

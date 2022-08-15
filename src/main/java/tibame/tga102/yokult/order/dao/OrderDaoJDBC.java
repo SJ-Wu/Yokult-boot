@@ -14,7 +14,6 @@ import tibame.tga102.yokult.order.vo.Order;
 import tibame.tga102.yokult.orderlist.vo.Orderlist;
 
 
-
 public class OrderDaoJDBC implements OrderDao{
 	private DataSource dataSource;
 	

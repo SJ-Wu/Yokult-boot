@@ -89,7 +89,7 @@ public class OrderServiceImpl implements OrderService {
 		String orderDate = sdf.format(new Date());
 		AllInOne allInOne = new AllInOne("");
 		AioCheckOutALL aioCheckOutALL = new AioCheckOutALL();
-		aioCheckOutALL.setMerchantTradeNo(order.getOrdid().replaceAll("_", "")); //訂單編號必須數字+英文字母 
+		aioCheckOutALL.setMerchantTradeNo(order.getOrdid().replaceAll("_", "")); //除掉資料庫裡面的底線   //訂單編號必須數字+英文字母 
 		System.out.println("aaaaaa:"+ order.getOrdid());
 		aioCheckOutALL.setMerchantTradeDate(orderDate);
 		aioCheckOutALL.setTotalAmount(totalCount); //加總

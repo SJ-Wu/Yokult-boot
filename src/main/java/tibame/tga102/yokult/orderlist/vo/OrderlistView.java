@@ -43,5 +43,10 @@ public class OrderlistView {
 	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
 	}
+
+	public Integer getProprice() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
 

@@ -11,4 +11,5 @@ public interface OrderlistDao {
 	Integer insertOrderlist(Orderlist orderlist); //新增（界面）
 	Integer deleteOrderlist(Orderlist orderlist); //刪除（界面）
 	Integer modifyOrderlist(Orderlist orderlist);  //修改（界面）
+	List<Orderlist> selectAll();
 }

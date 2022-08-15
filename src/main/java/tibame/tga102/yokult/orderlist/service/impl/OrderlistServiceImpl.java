@@ -40,7 +40,6 @@ public class OrderlistServiceImpl implements OrderlistService {
 	@Override
 	// 新增
 	public Integer insertOrderlist(Orderlist orderlist) {
-		// TODO: validation flow
 		// 1. Check orderid is valid
 		// 2. Check proid is valid
 		return orderlistDao.insertOrderlist(orderlist);
@@ -74,8 +73,9 @@ public class OrderlistServiceImpl implements OrderlistService {
 	// 修改
 	public Integer modifyOrderlist(Orderlist orderlist) {
 		if (orderlist != null) {
-			String id = orderlist.getProID();
-			if (checkValue(id)) {
+			Integer id = orderlist.getProID();
+//			if (checkValue(id)) 
+			{
 				return orderlistDao.modifyOrderlist(orderlist);
 
 			}
