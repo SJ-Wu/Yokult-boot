@@ -1,4 +1,4 @@
-package tibame.tga102.yokult.doctor.servlet;
+package tibame.tga102.yokult.doctor.controller;
 
 import java.io.IOException;
 import java.sql.Date;
@@ -41,13 +41,13 @@ import tibame.tga102.yokult.doctor.service.DoctorService;
 @ResponseBody
 @CrossOrigin
 @RequestMapping(path= {"/api/0.01/doctor"})
-public class DoctorServlet extends HttpServlet {
+public class DoctorApiController extends HttpServlet {
 	@Autowired
 	DoctorService doctorServiceImpl;
 	
 
 	private static final long serialVersionUID = 1L;
-    public DoctorServlet() {
+    public DoctorApiController() {
         super();
     }
     

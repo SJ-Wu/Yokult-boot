@@ -1,4 +1,4 @@
-package tibame.tga102.yokult.booking.servlet;
+package tibame.tga102.yokult.booking.controller;
 //package web.booking.servlet;
 //
 //import java.io.IOException;

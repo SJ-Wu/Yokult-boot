@@ -120,12 +120,18 @@ public class BookingServiceImpl implements BookingService  {
 		//當天已經有掛號資料 return -1
 		List<Patient>list = patientDAOImpl.selectPatientByIdcard(patient);
 		if (list != null) {
-			for (Patient vo : list) {
-				if ((patient.getBookingDate()).equals(vo.getBookingDate())){
-					System.out.println("you already booking this day");
-					return -1;
-				}
+			boolean hasBooking = list.stream()
+									.anyMatch(vo -> patient.getBookingDate().equals(vo.getBookingDate()));
+			if(hasBooking) {
+				System.out.println("you already booking this day");
+				return -1;
 			}
+//			for (Patient vo : list) {
+//				if ((patient.getBookingDate()).equals(vo.getBookingDate())){
+//					System.out.println("you already booking this day");
+//					return -1;
+//				}
+//			}
 		}
 		
 		//要先拿到patient中 某醫師某時段總共幾人
@@ -254,13 +260,9 @@ public class BookingServiceImpl implements BookingService  {
 		patient.setCheckinCondition(1);
 		patient.setPatientIdcard(Idcard);
 		System.out.println("service: start showOneChart");
-		System.out.println(patient.getBookingDate());
-		System.out.println(Idcard);
 		List<Patient> list = patientDAOImpl.selectPatientByIdcardAndCheckinCondition(patient);
 		Map<String, String> map = new HashMap<String, String>();
 		for(Patient vo : list) {
-			System.out.println(patient.getBookingDate());
-			System.out.println(vo.getBookingDate());
 			if(patient.getBookingDate().toString().equals(vo.getBookingDate().toString())) {
 				String drname = doctorDAOImpl.selectDoctorNameById(vo.getDoctorId());
 				map.put("doctorName", drname);

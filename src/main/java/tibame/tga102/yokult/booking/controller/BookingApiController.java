@@ -1,4 +1,4 @@
-package tibame.tga102.yokult.booking.servlet;
+package tibame.tga102.yokult.booking.controller;
 import java.io.IOException;
 import java.sql.Date;
 import java.util.HashMap;
@@ -33,7 +33,7 @@ import tibame.tga102.yokult.doctor.service.DoctorService;
 @CrossOrigin
 @ResponseBody
 @RequestMapping(path = {"/api/0.01/booking"})
-public class BookingServlet extends HttpServlet {
+public class BookingApiController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	@Autowired
 	private BookingService bookingServiceImpl;
@@ -44,7 +44,7 @@ public class BookingServlet extends HttpServlet {
 	@Autowired
 	ServletContext servletContext;
 	
-    public BookingServlet() {
+    public BookingApiController() {
         super();
     }
     
