@@ -1,11 +1,29 @@
 package tibame.tga102.yokult.orderlist.vo;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "v_admin_orderlist")
 public class OrderlistView {
-	private String ordid;
-	private Integer orderlistid; // 訂單商品編號
-	private String proName;// 商品ID
-	private Integer quantity;// 訂購數量
 	
+	@Id
+	@Column(name = "ordid")
+	private String ordid;
+	
+	@Column(name = "orderlistid")
+	private Integer orderlistid; // 訂單商品編號
+	
+	@Column(name = "proname")
+	private String proName;// 商品ID
+	
+	@Column(name = "quantity")
+	private Integer quantity;// 訂購數量
+
 	@Override
 	public String toString() {
 		return "OrderlistView [ordid=" + ordid + ", orderlistid=" + orderlistid + ", proName=" + proName + ", quantity="
@@ -49,4 +67,3 @@ public class OrderlistView {
 		return null;
 	}
 }
-

@@ -29,7 +29,7 @@ public class OrderlistDaoHibernate implements OrderlistDao{
 
 	@Override
 	public List<OrderlistView> searchOrderlistView(OrderlistView orderlist) {
-		return this.getSession().createQuery("from Orderlist where ordid = :searchid", OrderlistView.class)
+		return this.getSession().createQuery("from OrderlistView where ordid = :searchid", OrderlistView.class)
 				.setParameter("searchid", orderlist.getOrdid())
 				.list();
 	}

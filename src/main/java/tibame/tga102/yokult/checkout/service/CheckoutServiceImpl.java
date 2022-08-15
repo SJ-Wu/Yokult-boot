@@ -3,28 +3,23 @@ package tibame.tga102.yokult.checkout.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.naming.NamingException;
+import javax.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import tibame.tga102.yokult.checkout.vo.Checkout;
-import tibame.tga102.yokult.order.dao.OrderDaoJDBC;
 import tibame.tga102.yokult.order.service.OrderService;
-import tibame.tga102.yokult.order.service.OrderServiceImpl;
 import tibame.tga102.yokult.orderlist.service.OrderlistService;
-import tibame.tga102.yokult.orderlist.service.impl.OrderlistServiceImpl;
 import tibame.tga102.yokult.orderlist.vo.OrderlistView;
 
+@Service
+@Transactional
 public class CheckoutServiceImpl implements CheckoutService {
+	@Autowired
 	private OrderService orderService;
+	@Autowired
 	private OrderlistService orderlistService;
-	private OrderDaoJDBC dao = new OrderDaoJDBC();
-	
-//	
-//	Order order = new Order();
-//	List<String> list = new ArrayList<>();
-	public CheckoutServiceImpl() throws NamingException {
-		orderService = new OrderServiceImpl();
-		orderlistService = new OrderlistServiceImpl();
-	}
 
 	@Override
 	public String processCheckout(Checkout checkout) { 
@@ -35,11 +30,10 @@ public class CheckoutServiceImpl implements CheckoutService {
 				for (OrderlistView item: orderlistView) {
 					list.add(item.getProName());
 				}
+				System.out.println("========Order build successfully=======");
 				return orderService.ecpayValidation(list,checkout.getOrder(),checkout.getTotalCount()); // get到ordertotal，從orderdaojdbc 撰寫 checkout.getTotalCount()
 			}
 		}
 		return "False";
 	}
-	
-	
 }
