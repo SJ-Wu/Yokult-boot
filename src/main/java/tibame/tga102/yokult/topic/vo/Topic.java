@@ -37,7 +37,7 @@ public class Topic implements Serializable{
 	private String content;
 	
 	@Column(name = "sortid")
-	private Integer sortid;
+	private String sortid;
 	
 	@Column(name = "views")
 	private Integer views;
@@ -98,11 +98,11 @@ public class Topic implements Serializable{
 		this.content = content;
 	}
 
-	public Integer getSortid() {
+	public String getSortid() {
 		return sortid;
 	}
 
-	public void setSortid(Integer sortid) {
+	public void setSortid(String sortid) {
 		this.sortid = sortid;
 	}
 

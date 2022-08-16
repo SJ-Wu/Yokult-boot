@@ -38,6 +38,7 @@ public class TopicDaoHibernate implements TopicDao {
 			update.setForeword(topic.getForeword());
 			update.setContent(topic.getContent());
 			update.setViews(topic.getViews());
+			update.setPosttime(topic.getPosttime());
 			return 1;
 		}
 		return -1;
