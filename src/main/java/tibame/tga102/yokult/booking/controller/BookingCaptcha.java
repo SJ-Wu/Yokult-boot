@@ -6,8 +6,10 @@ import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Base64;
+import java.util.Date;
+import java.util.Map;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
@@ -17,15 +19,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.collections4.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import tibame.tga102.yokult.util.YokultConstants;
 //@WebServlet("/captcha")
 @RestController
-@RequestMapping(path = {"/captcha"})
+@RequestMapping(path = {YokultConstants.BOOKING_API})
 public class BookingCaptcha extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     @Autowired
@@ -35,15 +40,26 @@ public class BookingCaptcha extends HttpServlet {
         super();
     }
     
-	@GetMapping
-	public byte[] getPasswordImage() {
+	@GetMapping(path = {"/bookingcaptcha"})
+	public Map<String, Object> getPasswordImage() {
 		String cpassword = String.valueOf((int)(Math.random()*(10000-999))+1000);
-		servletContext.setAttribute("cpassword", cpassword);
-		System.out.println("[ServletContext setAttribute cpassword]" + cpassword);
+//		servletContext.setAttribute("cpassword", cpassword);
+		System.out.println("[bookingcaptcha cpassword]" + cpassword);
+        Map<String, Object> map = new HashedMap<String, Object>();
+
+		Date expireDate = new Date(System.currentTimeMillis() + 20 * 60 * 1000);
+		String jwtToken = Jwts.builder().setSubject(cpassword).setExpiration(expireDate)
+				.signWith(SignatureAlgorithm.HS512, YokultConstants.JWTKEY).compact();
+		System.out.println("cpassword jwtToken: " + jwtToken);
         
 		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 			ImageIO.write(getPasswordImage(cpassword), "jpeg", baos);
-			return baos.toByteArray();
+			
+			 map.put("pic",baos.toByteArray());
+			 map.put("cpasswordjwtToken", jwtToken);
+			 
+			 return map;
+			 
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;

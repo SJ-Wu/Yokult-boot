@@ -10,6 +10,8 @@ public class YokultConstants {
 	public static final String ORDER_API = "/api/0.01/order";
 	public static final String ORDERLIST_API = "/api/0.01/orderlist";
 	public static final String CHECKOUT_API = "/Checkout";
+	public static final String BOOKING_API = "/api/0.01/booking";
+	public static final String DOCTOR_API = "/api/0.01/doctor";
 	public static final String CLIENT_BACK_URL = "http://localhost:8080/Proj_Yokult/clinic/shopping.html";
 	public static final String RETURN_URL = "http://localhost:8080/Proj_Yokult/clinic/shopping.html";
 }

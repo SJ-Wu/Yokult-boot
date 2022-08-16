@@ -157,7 +157,10 @@ public class BookingServiceImpl implements BookingService  {
 		Doctor doctor = new Doctor();
 		doctor.setDoctorId(Integer.valueOf(doctorId));
 		byte[] photo = doctorDAOImpl.selectOne(doctor).getDoctorPhoto();
-		String photostr = Base64.getEncoder().encodeToString(photo);
+		String photostr = "";
+		if(photo!= null) {
+			photostr = Base64.getEncoder().encodeToString(photo);
+		}
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("list", listDr);
