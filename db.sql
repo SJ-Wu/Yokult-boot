@@ -9,7 +9,7 @@ DROP TABLE IF EXISTS `member`;
 CREATE TABLE `member` (
   `memid` VARCHAR(50) NOT NULL COMMENT '會員帳號',
   `email` VARCHAR(320) NOT NULL COMMENT '會員信箱',
-  `password` VARCHAR(10) NOT NULL COMMENT '會員密碼',
+  `password` VARCHAR(256) NOT NULL COMMENT '會員密碼',
   `name` VARCHAR(10) NOT NULL COMMENT '會員姓名',
   `birth` DATE COMMENT '會員生日',
   `cellphone` VARCHAR(10) NOT NULL COMMENT '手機號碼',

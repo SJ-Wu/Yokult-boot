@@ -5,8 +5,6 @@ import java.util.List;
 import javax.persistence.PersistenceContext;
 
 import org.hibernate.Session;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import tibame.tga102.yokult.member.vo.Member;
@@ -19,16 +17,9 @@ public class MemberDaoHibernate implements MemberDao {
 	public Session getSession() {
 		return this.session;
 	}
-	
-	@Autowired
-	private PasswordEncoder passwordEncoder;
 
 	@Override
 	public Integer insert(Member member) {
-		// Generate Encoding password
-		String plainPassword = member.getMemPassword();
-		member.setMemPassword(passwordEncoder.encode(plainPassword));
-		System.out.println("EncodePassword: " + member.getMemPassword());
 		Member temp = (Member)this.getSession().get(Member.class, member.getMemID());
 		if (temp == null) {
 			this.getSession().save(member);
@@ -47,7 +38,7 @@ public class MemberDaoHibernate implements MemberDao {
 	public Member selectByMemberIdAndPassword(Member member) {
 		Member resultMember = (Member)this.getSession().get(Member.class, member.getMemID());
 		if (resultMember != null) {
-			if (passwordEncoder.matches(member.getMemPassword(), resultMember.getMemPassword())) {
+			if (member.getMemPassword().equals(resultMember.getMemPassword())) {
 				return resultMember;
 			}
 		}
