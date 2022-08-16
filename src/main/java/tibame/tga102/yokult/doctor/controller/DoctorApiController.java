@@ -36,11 +36,12 @@ import tibame.tga102.yokult.booking.vo.DoctorConvert;
 import tibame.tga102.yokult.booking.vo.DoctorSchedule;
 import tibame.tga102.yokult.booking.vo.Patient;
 import tibame.tga102.yokult.doctor.service.DoctorService;
+import tibame.tga102.yokult.util.YokultConstants;
 
 @Controller
 @ResponseBody
 @CrossOrigin
-@RequestMapping(path= {"/api/0.01/doctor"})
+@RequestMapping(path= {YokultConstants.DOCTOR_API})
 public class DoctorApiController extends HttpServlet {
 	@Autowired
 	DoctorService doctorServiceImpl;
@@ -191,7 +192,7 @@ public class DoctorApiController extends HttpServlet {
 		return toFrontEnd("finish");
 	}
 	
-	//寫到這裡
+//寫到這裡
 	@PutMapping(path= {"/updateDrSchedule"})
 	public Map<String, Object> updateDrSchedule(@RequestBody DoctorConvert doctorConvert, BindingResult bindingResult ){
 		System.out.println("[Test] get doctor convert");

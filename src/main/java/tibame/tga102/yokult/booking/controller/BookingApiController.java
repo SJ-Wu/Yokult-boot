@@ -23,16 +23,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import tibame.tga102.yokult.booking.service.BookingService;
 import tibame.tga102.yokult.booking.vo.CheckinVO;
 import tibame.tga102.yokult.booking.vo.Doctor;
 import tibame.tga102.yokult.booking.vo.Patient;
 import tibame.tga102.yokult.doctor.service.DoctorService;
+import tibame.tga102.yokult.util.YokultConstants;
 
 @Controller
 @CrossOrigin
 @ResponseBody
-@RequestMapping(path = {"/api/0.01/booking"})
+@RequestMapping(path = {YokultConstants.BOOKING_API})
 public class BookingApiController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	@Autowired
@@ -64,11 +67,16 @@ public class BookingApiController extends HttpServlet {
 
     //查詢某會員預約資訊
     @GetMapping(path = {"/bookingQuery"})
-    public Map<String, Object> bookingQuery(@RequestParam String cinput, @RequestParam String memID){
-		String cpassword = (String)servletContext.getAttribute("cpassword");
-		System.out.println("[bookginservlet getAttribute cpassword]" + cpassword);
+    public Map<String, Object> bookingQuery(@RequestParam String cinput, @RequestParam String memID, @RequestParam String ctoken){
+//		String cpassword = (String)servletContext.getAttribute("cpassword");
+//		System.out.println("[bookginservlet getAttribute cpassword]" + cpassword);
 		
-		if(cpassword != null && !cpassword.equals(cinput)) {
+    	Claims claims = Jwts.parser().setSigningKey(YokultConstants.JWTKEY).parseClaimsJws(ctoken).getBody();
+    	claims.get("sub");
+		System.out.println("JWT ctoken payload:" + claims.get("sub").toString());
+		String strclaims = claims.get("sub").toString();
+    	
+		if(strclaims != null && !strclaims.equals(cinput)) {
 			return toFrontEnd("incorrect captcha");
 		}	
 		
@@ -81,6 +89,26 @@ public class BookingApiController extends HttpServlet {
 				return toFrontEnd("bookingQuery sucess", "list", list);
 			} else {
 				return toFrontEnd("you have no unchecked booking data");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return toFrontEnd(" Exception failure bookingQuery");
+    }
+    
+    //查詢是否初診
+    @GetMapping(path = {"/bookingQuery/hasCameHere"})
+    public Map<String, Object> bookingQuery(@RequestParam String memID){
+		
+		try {
+			Patient patient = new Patient();
+			patient.setMemID(memID);
+		//patient傳給service service再查出預約日期
+			String id = bookingServiceImpl.getIdcardBymemID(patient);
+			if(id != null) {
+				return toFrontEnd("booking data sucess", "patientIdcard", id);
+			} else {
+				return toFrontEnd("you have no booking data");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
