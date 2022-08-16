@@ -39,4 +39,10 @@ public class TopicServiceImpl implements TopicService {
 		return dao.delete(topic);
 	}
 
+	@Override
+	public Integer updateview(Topic topic) {
+		// TODO Auto-generated method stub
+		return dao.updateview(topic);
+	}
+
 }

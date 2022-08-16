@@ -51,7 +51,7 @@ public class TopicDaoHibernate implements TopicDao {
 		return this.getSession().createQuery(
 				"update Topic " + 
 				"set views = :newViews " +
-				"where topicid = :updateId")
+				"where topid = :updateId")
 				.setParameter("newViews", topic.getViews())
 				.setParameter("updateId", topic.getTopid())
 				.executeUpdate();
