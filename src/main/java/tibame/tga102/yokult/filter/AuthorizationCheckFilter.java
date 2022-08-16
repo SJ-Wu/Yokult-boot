@@ -20,7 +20,6 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import tibame.tga102.yokult.util.YokultConstants;
 
-@WebFilter
 public class AuthorizationCheckFilter extends OncePerRequestFilter {
 
 	@Override
