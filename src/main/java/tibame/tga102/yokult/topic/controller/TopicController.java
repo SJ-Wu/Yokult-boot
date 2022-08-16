@@ -66,6 +66,26 @@ public class TopicController {
 			ResponseEntity<?> response = ResponseEntity.noContent().build();
 			return response;
 		}
+		
+		
+	}
+	
+	
+	@PostMapping(path="/updateview")
+	public ResponseEntity<?> updateview(@RequestBody Topic topic) {
+		Integer status = topicService.updateview(topic);
+		if (status > 0) {
+			URI uri = URI.create(YokultConstants.TOPIC_API);
+			// 201 (Created)
+			ResponseEntity<?> response = ResponseEntity.created(uri).build();
+			return response;
+		} else {
+			// 500 (internal server error)
+			ResponseEntity<?> response = ResponseEntity.noContent().build();
+			return response;
+		}
+		
+		
 	}
 	
 	

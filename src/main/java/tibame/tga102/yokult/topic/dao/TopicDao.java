@@ -9,5 +9,6 @@ public interface TopicDao {
 	List<Topic> selectAll();
 	Integer update(Topic topic);
 	Integer delete(Topic topic);
+	Integer updateview(Topic topic);
 	
 }

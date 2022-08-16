@@ -7,6 +7,7 @@ import javax.persistence.PersistenceContext;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
+import tibame.tga102.yokult.member.vo.Member;
 import tibame.tga102.yokult.topic.dao.TopicDao;
 import tibame.tga102.yokult.topic.vo.Topic;
 
@@ -42,8 +43,20 @@ public class TopicDaoHibernate implements TopicDao {
 			return 1;
 		}
 		return -1;
+		
 	}
-
+	
+	@Override
+	public Integer updateview(Topic topic) {
+		System.out.println("UpdateID: " + topic.getTopid() + " view: " + topic.getViews());
+		return this.getSession().createQuery(
+				"update Topic " + 
+				"set views = :newViews " +
+				"where topid = :updateId")
+				.setParameter("newViews", topic.getViews())
+				.setParameter("updateId", topic.getTopid())
+				.executeUpdate();
+	}
 	
 
 	@Override
