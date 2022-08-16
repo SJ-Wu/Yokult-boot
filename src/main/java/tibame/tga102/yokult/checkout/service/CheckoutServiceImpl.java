@@ -22,16 +22,26 @@ public class CheckoutServiceImpl implements CheckoutService {
 	private OrderlistService orderlistService;
 
 	@Override
-	public String processCheckout(Checkout checkout) { 
+	public String processCheckout(Checkout checkout) {
 		List<String> list = new ArrayList<>();
 		if ("Success".equals(orderService.addOrder(checkout.getOrder()))) {
-			if ("Success".equals(orderlistService.addOrderlist(checkout.getOrderlist(), checkout.getOrder().getOrdid()))) {
-				List<OrderlistView>orderlistView = orderlistService.searchOrderlistViewByOrdid(checkout.getOrder().getOrdid());
-				for (OrderlistView item: orderlistView) {
+			if ("Success"
+					.equals(orderlistService.addOrderlist(checkout.getOrderlist(), checkout.getOrder().getOrdid()))) {
+				List<OrderlistView> orderlistView = orderlistService
+						.searchOrderlistViewByOrdid(checkout.getOrder().getOrdid());
+				for (OrderlistView item : orderlistView) {
+					System.out.println("ItemgetProName: "+item.getProName());
 					list.add(item.getProName());
 				}
 				System.out.println("========Order build successfully=======");
-				return orderService.ecpayValidation(list,checkout.getOrder(),checkout.getTotalCount()); // get到ordertotal，從orderdaojdbc 撰寫 checkout.getTotalCount()
+				if ("creditcard".equals(checkout.getPaymethod())) {
+					// get到ordertotal，從orderdaojdbc
+					// 撰寫
+					// checkout.getTotalCount()
+					return orderService.ecpayValidation(list, checkout.getOrder(), checkout.getTotalCount());
+				} else {
+					return "Success";
+				}
 			}
 		}
 		return "False";

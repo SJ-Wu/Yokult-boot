@@ -5,10 +5,19 @@ import tibame.tga102.yokult.order.vo.Order;
 import tibame.tga102.yokult.orderlist.vo.Orderlist;
 
 public class Checkout {
+	private String paymethod;
 	private String totalCount;
 	private Order order;
 	private List<Orderlist> orderlist;
 	
+	public String getPaymethod() {
+		return paymethod;
+	}
+
+	public void setPaymethod(String paymethod) {
+		this.paymethod = paymethod;
+	}
+
 	public String getTotalCount() {
 		return totalCount;
 	}
