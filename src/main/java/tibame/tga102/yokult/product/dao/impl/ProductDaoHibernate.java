@@ -35,12 +35,15 @@ public class ProductDaoHibernate implements ProductDao {
 		Product oldProduct = this.getSession().get(Product.class, product.getProID());
 		System.out.println("oldProduct" + oldProduct);
 		if (oldProduct != null) {
-			Object obj = this.getSession().merge(product);
-			if (obj != null) {
+			
+			oldProduct.setProName(product.getProName());
+			oldProduct.setProStock(product.getProStock());
+			oldProduct.setProPrice(product.getProPrice());
+			oldProduct.setProSpecs(product.getProSpecs());
+			oldProduct.setProBrand(product.getProBrand());
+			oldProduct.setProCategory(product.getProCategory());
 				return 1;
-			}
 		}
-
 		return 0;
 	}
 

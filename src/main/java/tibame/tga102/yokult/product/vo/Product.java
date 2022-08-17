@@ -7,9 +7,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.DynamicInsert;
 import org.springframework.stereotype.Component;
 
 @Entity
+@DynamicInsert
 @Table(name = "product")
 public class Product{
 	@Id

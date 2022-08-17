@@ -40,7 +40,7 @@ public class ProductApiController {
 	private HttpServletRequest request;
 
 	@GetMapping
-	public Map<String, Object> getAll(@RequestParam String category, @RequestParam String productName){
+	public Map<String, Object> getAll(@RequestParam(required=false) String category, @RequestParam(required=false) String productName){
 		
 		List<Product> products = null;
 		Map<String, Object> respObject = new HashedMap<String, Object>();
@@ -56,7 +56,7 @@ public class ProductApiController {
 		return respObject;
 	}
 	
-	@PutMapping(path = {""})
+	@PutMapping
 	public void save(@RequestBody Product product){
 		try {
 			service.save(product);
@@ -85,7 +85,7 @@ public class ProductApiController {
 				String filename = sDateFormat.format(new Date()) + "_" + part.getSubmittedFileName();
 				File f = new File(fSaveDirectory, filename);
 				part.write(f.toString());
-				imagePath = request.getContextPath()+ saveDirectory + "/" + filename;
+				imagePath = "http://localhost:8080/yokult"+ saveDirectory + "/" + filename;
 				System.out.println("image path: " + imagePath);
 			}
 			respObject.put("msg", "success");
