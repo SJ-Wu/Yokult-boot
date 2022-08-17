@@ -26,7 +26,7 @@ public class Orderlist {
 	
 	@Column(name ="ordid")
 	private String ordid;// 訂單
-
+	
 	@Override
 	public String toString() {
 		return "Orderlist [orderlistid=" + orderlistid + ", proid=" + proID + ", proprice=" + proPrice + ", quantity="

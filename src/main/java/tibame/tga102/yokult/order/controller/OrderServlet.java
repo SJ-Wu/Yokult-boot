@@ -84,7 +84,7 @@ package tibame.tga102.yokult.order.controller;
 //			out.close();
 //			
 //			return;
-////依據類別回傳多筆訂單 /api/0.01/order/selectOrderStatus
+//依據類別回傳多筆訂單 /api/0.01/order/selectOrderStatus
 //		} else if("selectOrderStatus".equals(infos[1])) {
 //			Order order = gson.fromJson(br, Order.class);
 //			JsonObject jsonObject = new JsonObject();
@@ -110,7 +110,7 @@ package tibame.tga102.yokult.order.controller;
 //			
 //		}
 //	}
-//
+
 //
 //	/*
 //	 * 誇域

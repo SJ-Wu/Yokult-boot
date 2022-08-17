@@ -2,6 +2,7 @@ package tibame.tga102.yokult.checkout.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.transaction.Transactional;
 
@@ -27,11 +28,11 @@ public class CheckoutServiceImpl implements CheckoutService {
 		if ("Success".equals(orderService.addOrder(checkout.getOrder()))) {
 			if ("Success"
 					.equals(orderlistService.addOrderlist(checkout.getOrderlist(), checkout.getOrder().getOrdid()))) {
-				List<OrderlistView> orderlistView = orderlistService
+				List<Map> orderlistView = orderlistService
 						.searchOrderlistViewByOrdid(checkout.getOrder().getOrdid());
-				for (OrderlistView item : orderlistView) {
-					System.out.println("ItemgetProName: "+item.getProName());
-					list.add(item.getProName());
+				for (Map item : orderlistView) {
+					System.out.println("ItemgetProName: "+item.get("proName"));
+					list.add(item.get("proName").toString());
 				}
 				System.out.println("========Order build successfully=======");
 				if ("creditcard".equals(checkout.getPaymethod())) {

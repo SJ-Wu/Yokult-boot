@@ -1,6 +1,7 @@
 package tibame.tga102.yokult.orderlist.service.impl;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import javax.transaction.Transactional;
@@ -12,6 +13,7 @@ import tibame.tga102.yokult.orderlist.dao.OrderlistDao;
 import tibame.tga102.yokult.orderlist.service.OrderlistService;
 import tibame.tga102.yokult.orderlist.vo.Orderlist;
 import tibame.tga102.yokult.orderlist.vo.OrderlistView;
+import tibame.tga102.yokult.product.dao.impl.ProductDaoHibernate;
 
 @Service
 @Transactional
@@ -19,7 +21,7 @@ public class OrderlistServiceImpl implements OrderlistService {
 
 	@Autowired
 	private OrderlistDao orderlistDao; // 把 dao 變成一個屬性 
-
+	
 	@Override
 	// 查詢
 	public List<Orderlist> searchOrderlistByOrdid(String orderID) {
@@ -87,11 +89,11 @@ public class OrderlistServiceImpl implements OrderlistService {
 	}
 
 	@Override
-	public List<OrderlistView> searchOrderlistViewByOrdid(String orderID) {
+	public List<Map> searchOrderlistViewByOrdid(String orderID) {
 		if (checkValue(orderID)) {
 			OrderlistView orderlistView = new OrderlistView();
 			orderlistView.setOrdid(orderID);
-			return orderlistDao.searchOrderlistView(orderlistView);
+			return orderlistDao.searchOrderlistTest(orderID);
 		}
 		return null;
 	}

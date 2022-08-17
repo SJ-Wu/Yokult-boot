@@ -202,8 +202,7 @@ values
 (30, '130', '3', '22072900010');
 
 create view v_admin_orderlist (ordid, orderlistid, proname, quantity) 
-as select ordid, orderlistid, proname, quantity from orderlist o join product p where o.proid = p.proid;
-
+as select ordid, orderlistid, proname, quantity from orderlist o join product p on o.proid = p.proid;
 
 -- 員工資料
 DROP TABLE IF EXISTS `staff`;

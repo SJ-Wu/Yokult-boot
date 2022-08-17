@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import tibame.tga102.yokult.orderlist.service.OrderlistService;
 import tibame.tga102.yokult.orderlist.vo.Orderlist;
+import tibame.tga102.yokult.orderlist.vo.OrderlistView;
 import tibame.tga102.yokult.util.YokultConstants;
 
 @RestController
@@ -23,9 +24,13 @@ public class OrderlistController {
 	
 	// 查詢
 	@GetMapping
-	public Map<String, Object> getOrderlist(@RequestParam String id) {
+	public Map<String, Object> getOrderlist(@RequestParam String ordId) {
 		Map<String, Object> respObject = new HashedMap<String, Object>();
-		List<Orderlist> orderlist = orderlistService.searchOrderlistByOrdid(id);
+		List<Map> orderlist = orderlistService.searchOrderlistViewByOrdid(ordId);
+		
+//		List<OrderlistView> orderlist = orderlistService.searchOrderlistViewByOrdid(ordId);
+		System.out.println("============================TEST=============================");
+		System.out.println(orderlist);
 		if (orderlist != null) {
 			respObject.put("msg", "success");
 			respObject.put("Orderlists", orderlist);
