@@ -225,6 +225,8 @@ CREATE TABLE `staff` (
 INSERT INTO 
   `staff` (`staff_id`, `staff_name`, `staff_email`, `staff_idnumber`, `staff_birthday`, `staff_phone`, `staff_picture`, `annual_leave`, `personal_leave`, `official_leave`)
 VALUES
+
+  ('tga000', '醫生', 'doctor@gmail.com', 'a112233445', '1988-01-01','09123456789','','','',''),
   ('tga001', '陳花花', 'flower@gmail.com', 'a223456789', '1999-01-01','0987654399','','7','5','8'),
   ('tga002', '黃泡泡', 'pop@gmail.com', 'a223456788', '1999-01-02','0987654388','','3','3','8'),
   ('tga003', '林毛毛', 'green@gmail.com', 'a223456787', '1999-01-03','0987654377','','4','9','8');
@@ -471,7 +473,7 @@ CREATE TABLE `schedule` (
 COMMENT = '班表';
 
 INSERT INTO 
-  schedule (schedule_date, morning_shift, night_shift, day_off)
+  schedule (schedule_date, morning_shift, night_shift, day_off1, day_off2)
 VALUES
   ('2022-08-01', 'tga001', 'tga002', 'tga003'),
   ('2022-08-02', 'tga002', 'tga003', 'tga001'),
