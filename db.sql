@@ -467,7 +467,8 @@ CREATE TABLE `schedule` (
   `schedule_date` DATE NOT NULL COMMENT '日期',
   `morning_shift` VARCHAR(20) NOT NULL COMMENT '早班員工',
   `night_shift` VARCHAR(20) NOT NULL COMMENT '晚班員工',
-  `day_off` VARCHAR(20) NOT NULL COMMENT '休假員工',
+  `day_off1` VARCHAR(20) NOT NULL COMMENT '休假員工',
+  `day_off2` VARCHAR(20) NOT NULL COMMENT '休假員工',
   PRIMARY KEY (`schedule_date`))
 
 COMMENT = '班表';
