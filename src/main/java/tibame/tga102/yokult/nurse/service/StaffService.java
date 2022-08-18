@@ -55,7 +55,15 @@ public class StaffService {
 		} else {// 修改
 			map.put("type", "update");
 			try {
-				staffDao.update(staff);
+				Staff oldStaff = staffDao.selectByStaffId(staff.getStaff_id());
+				oldStaff.setStaff_name(staff.getStaff_name());
+				oldStaff.setStaff_email(staff.getStaff_email());
+				oldStaff.setStaff_idnumber(staff.getStaff_idnumber());
+				oldStaff.setStaff_birthday(staff.getStaff_birthday());
+				oldStaff.setStaff_phone(staff.getStaff_phone());
+				oldStaff.setStaff_picture(staff.getStaff_picture());
+				
+				staffDao.update(oldStaff);
 				map.put("msg", "success");
 			} catch (Exception e) {
 				e.printStackTrace();
