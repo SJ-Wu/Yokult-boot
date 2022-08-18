@@ -17,20 +17,14 @@ public class StaffController {
 
 	@Autowired
 	StaffService staffService;
-	
+
 	@RequestMapping(value = "/getStaffAllData", method = RequestMethod.POST)
 	public List<Staff> getStaffAllData(@RequestBody Staff staff) {
 		System.out.println("this staff");
 		return staffService.getAllData(staff);
 	}
-	
-	// 登入
-	@RequestMapping(value = "/getStaffLogin", method = RequestMethod.POST)
-	protected Staff getStaffLogin(@RequestBody Staff staff) {
-		System.out.println("this staff login");
-		return null;
-	}
-	//新 修
+
+	// 新 修
 	@RequestMapping(value = "/addOrModify", method = RequestMethod.POST)
 	public Map<String, String> addOrModify(@RequestBody Staff staff) {
 		return staffService.addOrModify(staff);
@@ -40,7 +34,6 @@ public class StaffController {
 	@RequestMapping(value = "/deleteStaff", method = RequestMethod.POST)
 	protected String doDelete(@RequestBody Staff staff) {
 		return staffService.remove(staff);
-
 	}
 
 }

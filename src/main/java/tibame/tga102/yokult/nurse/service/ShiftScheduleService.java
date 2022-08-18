@@ -17,6 +17,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import tibame.tga102.yokult.nurse.dao.ShiftScheduleDao;
 import tibame.tga102.yokult.nurse.dao.StaffDao;
@@ -30,45 +31,33 @@ public class ShiftScheduleService {
 
 	@Autowired
 	private ShiftScheduleDao shiftScheduleDao;
+
 	@Autowired
 	private StaffDao staffDao;
 
-	public List<ShiftSchedule> getAll() {
-		return shiftScheduleDao.selectAll();
-	}
-
-	// 取id 拿畫假資料
+	// 取得畫假資料
 	public Map<String, Object> getStaffData(String StaffId) {
+		Map<String, Object> map = new HashMap<String, Object>();
 		if (StringUtils.isNotBlank(StaffId)) {
-			Map<String, Object> map = new HashMap<String, Object>();
-			if (!"tga000".equals(StaffId)) {
-				map.put("shiftSchedule", shiftScheduleDao.selectShiftScheduleByStaffId(StaffId));
-				map.put("staff", shiftScheduleDao.selectByStaffId(StaffId));
-			} else {
+			// 老闆ID 取得所有人資料、員工只能取自己的資料
+			if ("tga000".equals(StaffId)) {
 				map.put("shiftSchedule", shiftScheduleDao.selectAllShiftSchedule(StaffId));
 				map.put("staff", shiftScheduleDao.selectByStaffId(StaffId));
+			} else {
+				map.put("shiftSchedule", shiftScheduleDao.selectShiftScheduleByStaffId(StaffId));
+				map.put("staff", shiftScheduleDao.selectByStaffId(StaffId));
 			}
-			return map;
 		}
-		return null;
+		return map;
 	}
 
 	// 新增
 	public String insert(ShiftScheduleReq shiftScheduleReq) {
+		// 更新員工畫假資料
+		updateLevenDay(shiftScheduleReq);
 		String staffId = shiftScheduleReq.getStaffId();
-		List<String> eventIds = shiftScheduleReq.getEventId();
-		String annual = shiftScheduleReq.getAnnual();
-		String personal = shiftScheduleReq.getPersonal();
-		String official = shiftScheduleReq.getOfficial();
-		Staff leave = staffDao.selectByStaffId(staffId);
-		leave.setAnnual_leave(annual);
-		leave.setPersonal_leave(personal);
-		leave.setOfficial_leave(official);
-		leave.setStaff_id(staffId);
-		staffDao.update(leave);
 
-		System.out.println(staffId);
-		System.out.println(eventIds);
+		List<String> eventIds = shiftScheduleReq.getEventId();
 		// 刪除員工當月整批畫假資料
 		deleteData(staffId);
 		ShiftSchedule shiftSchedule = new ShiftSchedule();
@@ -90,16 +79,34 @@ public class ShiftScheduleService {
 
 	}
 
+	// update 員工休假天數
+	public void updateLevenDay(ShiftScheduleReq shiftScheduleReq) {
+		String staffId = shiftScheduleReq.getStaffId();
+		String annual = shiftScheduleReq.getAnnual();
+		String personal = shiftScheduleReq.getPersonal();
+		String official = shiftScheduleReq.getOfficial();
+		Staff leave = staffDao.selectByStaffId(staffId);
+		leave.setAnnual_leave(annual);
+		leave.setPersonal_leave(personal);
+		leave.setOfficial_leave(official);
+		leave.setStaff_id(staffId);
+		staffDao.update(leave);
+	}
+
 //刪除
 	private void deleteData(String staffId) {
 
 		if (StringUtils.isNotBlank(staffId)) {
+			// 取現在日期加上1個月 例: 現在時間 2022-08-25 > 2022-09-25
 			Date nextDate = localDateToUtilDate(LocalDate.now().plusMonths(1));
+			// 只取 yyyy-MM
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
 			String nextMonth = sdf.format(nextDate);
 
 			// 日期取年月後+% 給SQL 查詢用 例:2022-08-01 > 2022-08%
 			String shiftDateString = nextMonth.concat("%");
+
+			// 老闆ID 刪除全部人的資料
 			if ("tga000".equals(staffId)) {
 				shiftScheduleDao.deleteAll(shiftDateString);
 			} else {
@@ -108,24 +115,29 @@ public class ShiftScheduleService {
 		}
 	}
 
-//日期轉型
+	// 處理前端傳的畫假資料id id範例 : tga001陳花花2022-08-01amb
 	private ShiftSchedule handleEventIdString(String staffId, String eventString, Integer rowId) throws ParseException {
 
-		// tga001陳花花2022-08-01amb
+		// 截取時間字串
 		String shiftDateString = eventString.substring(9, 19);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		// 轉成日期型態
 		Date ShiftDate = sdf.parse(shiftDateString);
 
+		// 截取早晚班
 		String apm = eventString.substring(19, 21);
+		// 截取假別
 		String levenType = eventString.substring(eventString.length() - 1);
 		String insertStaffId = "";
+
+		// 老闆ID時 存入id為 畫假字串截取的id
 		if ("tga000".equals(staffId)) {
 			insertStaffId = eventString.substring(0, 6);
 		} else {
 			insertStaffId = staffId;
 		}
 
-//畫假資料
+		// 畫假資料
 		ShiftSchedule shiftSchedule = new ShiftSchedule();
 		shiftSchedule.setRow(rowId);
 		shiftSchedule.setStaffId(insertStaffId);
@@ -135,12 +147,11 @@ public class ShiftScheduleService {
 		return shiftSchedule;
 	}
 
-	// 判斷是不是當月畫架資料
+	// 判斷是不是當月畫假資料
 	public boolean checkInsertDate(String eventString) {
 		Date nextDate = localDateToUtilDate(LocalDate.now().plusMonths(1));
 		SimpleDateFormat yyyyMM = new SimpleDateFormat("yyyy-MM");
 		String nextMonth = yyyyMM.format(nextDate);
-		System.out.println(eventString);
 		String shiftDateString = eventString.substring(9, 16);
 
 		if (shiftDateString.equals(nextMonth)) {
@@ -151,6 +162,7 @@ public class ShiftScheduleService {
 	}
 
 	// 自動產班表
+	@Transactional
 	public String makeSchedule() {
 		try {
 			List<Date> utilDateList = getDatesForMonth();

@@ -21,22 +21,22 @@ public class ShiftScheduleController {
 //新增畫假
 	@RequestMapping(value = "/insertShiftSchedule", method = RequestMethod.POST)
 	protected String insertShiftSchedule(@RequestBody ShiftScheduleReq shiftScheduleReq) {
-		System.out.println("here la" + shiftScheduleReq);
+		System.out.println("this insertShiftSchedule");
 		return shiftScheduleService.insert(shiftScheduleReq);
 	}
 
 //畫假紀錄
 	@RequestMapping(value = "/getStaffLevenData", method = RequestMethod.POST)
 	protected Map<String, Object> getStaffLevenData(@RequestBody Staff staff) {
-		System.out.println(staff.getStaff_id());
+		System.out.println("this getStaffLevenData");
 		return shiftScheduleService.getStaffData(staff.getStaff_id());
 	}
 
 //自動產生班表
 	@RequestMapping(value = "/autoMakeSchedule", method = RequestMethod.POST)
 	protected String autoMakeSchedule(@RequestBody ShiftScheduleReq shiftScheduleReq) {
+		System.out.println("this autoMakeSchedule");
 		shiftScheduleService.insert(shiftScheduleReq);
-
 		return shiftScheduleService.makeSchedule();
 	}
 

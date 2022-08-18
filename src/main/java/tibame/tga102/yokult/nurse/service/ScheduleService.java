@@ -18,11 +18,13 @@ public class ScheduleService {
 
 	public List<ResultSchedule> getAll() {
 
+		// 取得班表資料
 		List<Schedule> schedules = scheduleDao.selectAll();
 
 		List<ResultSchedule> resultScheduleList = new ArrayList<ResultSchedule>();
+		// 拆分成早晚班
 		for (Schedule schedule : schedules) {
-			//早班
+			// 早班
 			ResultSchedule resultSchedule = new ResultSchedule();
 			resultSchedule.setSchedule_date(schedule.getSchedule_date());
 			resultSchedule.setWorkStaff(schedule.getMorning_shift());
@@ -30,7 +32,7 @@ public class ScheduleService {
 			resultSchedule.setDayOffstaff2(schedule.getDay_off2());
 			resultSchedule.setApm("a");
 			resultScheduleList.add(resultSchedule);
-			//晚班
+			// 晚班
 			resultSchedule = new ResultSchedule();
 			resultSchedule.setSchedule_date(schedule.getSchedule_date());
 			resultSchedule.setWorkStaff(schedule.getNight_shift());
@@ -41,18 +43,5 @@ public class ScheduleService {
 		}
 		return resultScheduleList;
 	}
-
-//
-//	public String addOrModify(Schedule schedule) {
-//		return null;
-//	}
-//	
-//	
-//	public Staff staffData(Staff staff) {
-//		String staffId = staff.getStaff_id();
-//		Staff resultStaff = scheduleDao.selectByStaffId(staffId);
-//
-//		return resultStaff;
-//	}
 
 }

@@ -49,13 +49,6 @@ public class ShiftScheduleDao {
 
 	@Transactional
 	public void insert(ShiftSchedule shiftSchedule) {
-//		String INSERTSQL = "INSERT INTO shift_schedule(schedule_date, staff_id, shiftschedule_type_of_leave, shiftschedule_morningshift_nightshift) VALUES(?,?,?,?)";
-//		int sucessNum = session.createNativeQuery(INSERTSQL)
-//				.setParameter(1, shiftSchedule.getScheduleDate())
-//				.setParameter(2, shiftSchedule.getStaffId())
-//				.setParameter(3, shiftSchedule.getShiftScheduleTypeOfLeave())
-//				.setParameter(4, shiftSchedule.getShiftScheduleMorningshiftNightshift())
-//				.executeUpdate();
 		session.save(shiftSchedule);
 
 	}
@@ -94,7 +87,6 @@ public class ShiftScheduleDao {
 
 	@Transactional
 	public void insertSchedule(Schedule schedule) {
-
 		session.save(schedule);
 
 	}

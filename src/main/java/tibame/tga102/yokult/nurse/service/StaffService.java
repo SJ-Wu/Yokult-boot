@@ -22,26 +22,14 @@ public class StaffService {
 
 	// 查詢員工資料
 	public List<Staff> getAllData(Staff staff) {
-		if ("tga000".equals(staff.getStaff_id())) { // 老闆
+		 // 老闆取所有人
+		if ("tga000".equals(staff.getStaff_id())) {
 			return staffDao.findAll();
 		} else {
 			List<Staff> staffList = new ArrayList<Staff>();
 			staffList.add(staffDao.selectByStaffId(staff.getStaff_id()));
 			return staffList;
 		}
-	}
-	
-	// 登入
-	public Staff login(Staff staff) {
-		if (StringUtils.isBlank(staff.getStaff_id()) || StringUtils.isBlank(staff.getStaff_idnumber())) {
-			System.out.println("員工編號或密碼錯誤");
-			return null;
-		}
-		staff = staffDao.selectByStaff_idAndstaff_idnumber(staff);
-		if (staff == null) {
-			return null;
-		}
-		return staff;
 	}
 
 	// 新，修
@@ -78,7 +66,6 @@ public class StaffService {
 	}
 
 	// 刪除
-
 	public String remove(Staff staff) {
 		try {
 			staffDao.delete(staff);
