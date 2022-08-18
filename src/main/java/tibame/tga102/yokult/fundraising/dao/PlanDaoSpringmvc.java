@@ -55,11 +55,19 @@ public class PlanDaoSpringmvc implements PlanDao {
 
 	@Override
 	public List<PlanBean> selectAllBeansByProposal(ProposalBean proposalBean) {
-		Query<PlanBean> qurey = this.session.createQuery("from PlanBean where proposalID =" + proposalBean.getProposalID(), PlanBean.class);
+		Query<PlanBean> qurey = this.session.createQuery("from PlanBean where proposalID = " + proposalBean.getProposalID(), PlanBean.class);
 		List<PlanBean> result = qurey.list();
 		return result;
 	}
 
+	@Override
+	public PlanBean select(Integer id) {
+		if(id != null && id >0) {
+			return this.session.get(PlanBean.class, id);
+		}
+		return null;
+	}
+	
 	@Override
 	public List<PlanBean> selectAll() {
 		Query<PlanBean> qurey = this.session.createQuery("from PlanBean", PlanBean.class);
@@ -71,7 +79,7 @@ public class PlanDaoSpringmvc implements PlanDao {
 	
 	//新增取得所有該plan相關的訂單
 	public List<OrderBean> getRelationalOrders(PlanBean planBean) {
-		Query<OrderBean> qurey = this.session.createQuery("from OrderBean where planID =" + planBean.getPlanID(), OrderBean.class);
+		Query<OrderBean> qurey = this.session.createQuery("from OrderBean where planID = " + planBean.getPlanID(), OrderBean.class);
 		List<OrderBean> result = qurey.list();
 		return result;
 	}

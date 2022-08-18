@@ -44,12 +44,13 @@ public class PlanBean {
 	private long planEndedDateTimeMillis;
 	
 
-	public void renewBean(PlanDao planDAO) {
+	public PlanBean renewBean(PlanDao planDAO) {
 		List<OrderBean> list_orderBean = planDAO.getRelationalOrders(this);
 		this.setPlanPurchases(list_orderBean.size());
 		this.planPictureBase64 = Base64.getEncoder().encodeToString(this.planPicture);
 		this.planStartedDateTimeMillis = this.planStartedDateTime.getTime();
 		this.planEndedDateTimeMillis = this.planEndedDateTime.getTime();
+		return this;
 	}
 	
 	public PlanBean() {}
@@ -104,6 +105,7 @@ public class PlanBean {
 	public Integer getPlanID() {
 		return planID;
 	}
+
 
 	public String getPlanName() {
 		return planName;
@@ -192,5 +194,23 @@ public class PlanBean {
 	public void setPlanPictureBase64(String planPictureBase64) {
 		this.planPictureBase64 = planPictureBase64;
 	}
+
+	public long getPlanStartedDateTimeMillis() {
+		return planStartedDateTimeMillis;
+	}
+
+	public void setPlanStartedDateTimeMillis(long planStartedDateTimeMillis) {
+		this.planStartedDateTimeMillis = planStartedDateTimeMillis;
+	}
+
+	public long getPlanEndedDateTimeMillis() {
+		return planEndedDateTimeMillis;
+	}
+
+	public void setPlanEndedDateTimeMillis(long planEndedDateTimeMillis) {
+		this.planEndedDateTimeMillis = planEndedDateTimeMillis;
+	}
+
+	
 
 }

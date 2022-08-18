@@ -1,77 +1,45 @@
 package tibame.tga102.yokult.fundraising.controller;
 
-import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.lang.reflect.Member;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Date;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.imageio.ImageIO;
-import javax.imageio.stream.FileImageInputStream;
-import javax.servlet.ServletException;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.annotation.MultipartConfig;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.servlet.http.Part;
-
 
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.json.HTTP;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 
-import tibame.tga102.yokult.fundraising.common.FundraisingUtil;
-import tibame.tga102.yokult.fundraising.common.HtmlDatetimeLocalToSQLDateTimeUtil;
-import tibame.tga102.yokult.fundraising.common.HtmlPostJsonGetter;
-import tibame.tga102.yokult.fundraising.service.CategoryService;
 import tibame.tga102.yokult.fundraising.service.OrderService;
 import tibame.tga102.yokult.fundraising.service.PlanService;
 import tibame.tga102.yokult.fundraising.service.PostNumberService;
 import tibame.tga102.yokult.fundraising.service.PostService;
 import tibame.tga102.yokult.fundraising.service.ProposalService;
-import tibame.tga102.yokult.fundraising.vo.CategoryBean;
 import tibame.tga102.yokult.fundraising.vo.OrderBean;
 import tibame.tga102.yokult.fundraising.vo.PlanBean;
 import tibame.tga102.yokult.fundraising.vo.PostBean;
 import tibame.tga102.yokult.fundraising.vo.ProposalBean;
-import tibame.tga102.yokult.member.dao.MemberDao;
-import tibame.tga102.yokult.member.dao.MemberDaoHibernate;
 import tibame.tga102.yokult.member.service.MemberService;
-import tibame.tga102.yokult.member.service.MemberServiceImpl;
-import tibame.tga102.yokult.order.vo.Order;
 
 
-@Controller
+@RestController
 @RequestMapping(path = {"/fundraising"})
 public class FundraisingController{
 
@@ -79,79 +47,107 @@ public class FundraisingController{
     MemberService memberService;
 	@Autowired
 	ProposalService proposalService;
+	@Autowired
+	PlanService planService;
+	@Autowired
+	PostService postService;
+	@Autowired
+	PostNumberService postnumberService;
+	@Autowired
+	OrderService orderService;
 	
-	@GetMapping(path = { "/{ProposalGetAll}" })
-	public Map<String, Object> selectAll() {
+//	=======================================  查詢全部proposal  =====================================
+	@PostMapping(path = "/ProposalGetAll")
+	public Map<String ,Object> ProposalGetAll() {
 		Map<String ,Object> respObject = new HashMap<String, Object>();
-		
-//    	res.setContentType("application/json; charset=utf-8");
-//    	ProposalService proposalService = new ProposalService();
-    	List<ProposalBean> queryResult = proposalService.selectAllBeans();
-    	String jsonString = new Gson().toJson(queryResult);
-    	
+		List<ProposalBean> queryResult = proposalService.selectAllBeans();
     	if(queryResult != null) {
-			respObject.put("ProposalGetAllmsg", "success");
-			respObject.put("ProposalGetAll", jsonString);
-			return respObject;
+			respObject.put("msg", "ProposalGetAll success");
+			respObject.put("Proposals", queryResult);
+    	}else {
+			respObject.put("msg", "ProposalGetAll fail");
+			respObject.put("Proposals", queryResult);
     	}
-    	return null;
-    	
-//    	PrintWriter out = res.getWriter();
-//    	String jsonString = new Gson().toJson(queryResult);
-//    	out.write(jsonString);
-//    	System.out.println("Succeeded to get proposalListJsonString : \n" + jsonString);
-    	
-//    	out.flush();
-//    	res.flushBuffer();
-//    	System.out.println();    //間隔一行
+    	System.out.println(respObject.get("msg"));
+    	return respObject;
 	}
 
 		
+//	===================================  僅查詢一個proposal + 一個plan + post + 會員資訊 =================================
+	@PostMapping(path = "/ProposalGetOne")
+	public Map<String ,Object> ProposalGetOne(@RequestBody ProposalBean pb) {
+		ProposalBean proposalQueryResult = proposalService.selectBean(Integer.parseInt(pb.getPage()));
+		System.out.println("proposalBean : " + proposalQueryResult);
+		
+		List<PlanBean> planQueryResult = planService.selectBeansByProposal(proposalQueryResult);
+		
+//		List<PostBean> postQueryResult = postService.selectAllBeansByMemberID(member.getMemID());
+		List<PostBean> postQueryResult = postService.selectAllBeansByMemberID("TGA001");
+		
+		Map<String ,Object> respObject = new HashMap<String, Object>();
+    	if(proposalQueryResult != null) {
+			respObject.put("msg", "ProposalGetOne success");
+			respObject.put("Proposal", proposalQueryResult);
+			respObject.put("Plans", planQueryResult);
+			respObject.put("Posts", postQueryResult);
+    	}else {
+			respObject.put("msg", "ProposalGetOne fail");
+			respObject.put("Proposal", proposalQueryResult);
+    	}
+    	System.out.println(respObject.get("msg"));
+    	return respObject;
+	}
+	
+	
+//	===================================  僅查詢自己的proposal + plan + 會員資訊 =================================
+	@PostMapping(path = "/ProposalGetMine")
+	public Map<String ,Object> ProposalGetMine() throws IOException {
 
-		
-		
-//	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-//	    req.setCharacterEncoding("UTF-8");
-//	    
-//	    res.addHeader("Access-Control-Allow-Origin", "*");
-////	    res.addHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE, HEAD");
-////	    res.addHeader("Access-Control-Allow-Headers", "X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept");
-////	    res.addHeader("Access-Control-Max-Age", "1728000");
-//
-//
-////	    儲存前端request傳來的table動作參數
-//	    String table = "";
-////	    儲存前端request傳來的action動作參數
-//	    String action = "";
-////	    儲存前端request傳來的page動作參數
-//	    String page = "";
-////	    儲存要前往的網頁url
-//	    String destination = "";
-////	    列印request的樣板
-//	    String template = "ParamName: %s,		ParamValue: %s";
-//	    
-//	    
-////	    取得HttpSession，傳遞參數用
-//	    HttpSession httpSession = req.getSession();
-////	    檢查是否登入、是否有提案
-//	    httpSession.setAttribute("memID", "TGA001");
-//	    String memberID = "TGA001";
-//	    String password = "123";
-//	    Integer proposalID = 1;
-//
-////	    傳遞錯誤訊息用
-//	    Map<String, String> errors = new HashMap<String, String>();
-//	    req.setAttribute("errors", errors);
-//
-//
-//	    tibame.tga102.yokult.member.vo.Member member = new tibame.tga102.yokult.member.vo.Member();
-//	    member.setMemID(memberID);
-//	    member.setMemPassword(password);
-//	    member = memberService.login(member);
-//	    if(null != member) {
-//	    	System.out.println("Login success.");
-//	    }
-//	    
+//    	List<ProposalBean> allMyProposalBeans = proposalService.selectMyAllBeans(member.getMemID());
+    	List<ProposalBean> allMyProposalBeans = proposalService.selectMyAllBeans("TGA001");
+    	List<Object> proposalPlanList = new ArrayList<Object>();
+    	for(ProposalBean proposalBean : allMyProposalBeans) {
+    		List<PlanBean> planQueryResult = planService.selectBeansByProposal(proposalBean);
+    		proposalPlanList.add(planQueryResult);
+    	}
+    	
+		Map<String ,Object> respObject = new HashMap<String, Object>();
+    	if(allMyProposalBeans != null) {
+			respObject.put("msg", "ProposalGetMine success");
+			respObject.put("Proposals", allMyProposalBeans);
+			respObject.put("Plans", proposalPlanList);
+    	}else {
+			respObject.put("msg", "ProposalGetMine fail");
+			respObject.put("Proposals", allMyProposalBeans);
+    	}
+    	System.out.println(respObject.get("msg"));
+    	return respObject;
+	}
+	
+	
+//	===================================  查詢自己訂單的proposal + plan + 會員資訊 =================================
+	@PostMapping(path = "/ProposalGetMyOrder")
+	public Map<String ,Object> ProposalGetMyOrder() {
+//	    List<OrderBean> list_Order = orderService.selectAllBeans(member.getMemID());
+	    List<OrderBean> list_Order = orderService.selectMyOrderBeans("TGA001");
+	    List<ProposalBean> list_Proposal = proposalService.selectByOrderList(list_Order);
+	    List<PlanBean> list_Plan = planService.selectByOrderList(list_Order);
+
+		Map<String ,Object> respObject = new HashMap<String, Object>();
+    	if(list_Order != null) {
+			respObject.put("msg", "ProposalGetMyOrder success");
+			respObject.put("Orders", list_Order);
+			respObject.put("Proposals", list_Proposal);
+			respObject.put("Plans", list_Plan);
+    	}else {
+			respObject.put("msg", "ProposalGetMyOrder fail");
+			respObject.put("Orders", list_Order);
+    	}
+    	System.out.println(respObject.get("msg"));
+    	return respObject;
+	}
+	
+	
 //	    
 ////	    == 檢查前端form資料 ==
 ////	   	如果有的話，建立檢視template並逐個列印參數，但不含upload file！！！

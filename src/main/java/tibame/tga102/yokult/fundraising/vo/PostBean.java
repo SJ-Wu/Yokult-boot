@@ -38,35 +38,26 @@ public class PostBean {
 	}
 	
 	public PostBean() {}
-	
-	public PostBean(String postFisrtName, String postLastName, String postCellphone, Integer post_SID,
-			String postAddress, String memID) {
-		super();
-		this.postFisrtName = postFisrtName;
-		this.postLastName = postLastName;
-		this.postCellphone = postCellphone;
-		this.post_SID = post_SID;
-		this.postAddress = postAddress;
-		this.memID = memID;
-	}
 
-	public PostBean(Integer postID, String postFisrtName, String postLastName, String postCellphone, Integer post_SID,
-			String postAddress, String memID) {
-		super();
-		this.postID = postID;
+	public PostBean(String postFisrtName, String postLastName, String postCellphone, Integer post_SID,
+			String postAddress, String memID, String postCity, String postArea, String postNumber) {
 		this.postFisrtName = postFisrtName;
 		this.postLastName = postLastName;
 		this.postCellphone = postCellphone;
 		this.post_SID = post_SID;
 		this.postAddress = postAddress;
 		this.memID = memID;
+		this.postCity = postCity;
+		this.postArea = postArea;
+		this.postNumber = postNumber;
 	}
 
 	@Override
 	public String toString() {
 		return "PostBean [postID=" + postID + ", postFisrtName=" + postFisrtName + ", postLastName=" + postLastName
 				+ ", postCellphone=" + postCellphone + ", post_SID=" + post_SID + ", postAddress=" + postAddress
-				+ ", memID=" + memID + "]";
+				+ ", memID=" + memID + ", postCity=" + postCity + ", postArea=" + postArea + ", postNumber="
+				+ postNumber + "]";
 	}
 
 	public Integer getPostID() {
@@ -120,7 +111,30 @@ public class PostBean {
 	public void setMemID(String memID) {
 		this.memID = memID;
 	}
-	
+
+	public String getPostCity() {
+		return postCity;
+	}
+
+	public void setPostCity(String postCity) {
+		this.postCity = postCity;
+	}
+
+	public String getPostArea() {
+		return postArea;
+	}
+
+	public void setPostArea(String postArea) {
+		this.postArea = postArea;
+	}
+
+	public String getPostNumber() {
+		return postNumber;
+	}
+
+	public void setPostNumber(String postNumber) {
+		this.postNumber = postNumber;
+	}
 
 	
 	

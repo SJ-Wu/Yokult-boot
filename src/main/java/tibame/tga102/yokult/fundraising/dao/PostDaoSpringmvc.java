@@ -52,7 +52,7 @@ public class PostDaoSpringmvc implements PostDao {
 	}
 	@Override
 	public List<PostBean> selectAllBeansByMemberID(String memID) {
-		Query<PostBean> qurey = this.session.createQuery("from PostBean where memID =\'" + memID + "\'", PostBean.class);
+		Query<PostBean> qurey = this.session.createQuery("from PostBean where memID = \'" + memID + "\'", PostBean.class);
 		List<PostBean> result = qurey.list();
 		return result;
 	}

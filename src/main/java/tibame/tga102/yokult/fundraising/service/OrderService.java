@@ -30,6 +30,9 @@ public class OrderService {
 	public List<OrderBean> selectAllBeans() {
 		return this.OrderDAO.selectAll();
 	}
+	public List<OrderBean> selectMyOrderBeans(String memID) {
+		return this.OrderDAO.selectByMemberID(memID);
+	}
 	public Integer selectLastID() {
 		return this.OrderDAO.selectLastID();
 	}

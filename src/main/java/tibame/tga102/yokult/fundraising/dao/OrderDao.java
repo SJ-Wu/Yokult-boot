@@ -10,5 +10,6 @@ public interface OrderDao {
 	public abstract OrderBean update(Integer id, OrderBean orderBean);
 	public abstract OrderBean select(Integer id);
 	public abstract List<OrderBean> selectAll();
+	public abstract List<OrderBean> selectByMemberID(String memID);
 	public abstract Integer selectLastID();
 }

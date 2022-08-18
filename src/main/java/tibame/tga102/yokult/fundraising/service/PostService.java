@@ -14,6 +14,8 @@ import tibame.tga102.yokult.fundraising.vo.PostBean;
 public class PostService {
 	@Autowired
 	PostDao postDAO;
+	@Autowired
+	PostNumberService postNumberService;
 
 	public PostBean insertBean(PostBean postBean) {
 		return this.postDAO.insert(postBean);
@@ -28,7 +30,11 @@ public class PostService {
 	}
 
 	public List<PostBean> selectAllBeansByMemberID(String memID) {
-		return this.postDAO.selectAllBeansByMemberID(memID);
+		List<PostBean> list_postBean = this.postDAO.selectAllBeansByMemberID(memID);
+		for(PostBean postBean : list_postBean) {
+			postBean.renew(postNumberService);
+		}
+		return list_postBean;
 	}
 
 	public List<PostBean> selectAllBeans() {

@@ -49,7 +49,9 @@ public class ProposalBean {
 	@Transient
 	private long currentMillis;
 	@Transient
-	private Integer proposalAmount;
+	private long proposalAmount;
+	@Transient
+	private String page;
 	
 	public ProposalBean renewBean(ProposalDao proposalDAO) {
 		this.proposalPictureBase64 = Base64.getEncoder().encodeToString(this.proposalPicture);
@@ -64,11 +66,13 @@ public class ProposalBean {
 	
 	public ProposalBean() {}
 
-	public ProposalBean(String proposalName, String proposalHostName, Integer proposalGoal,
-			String proposalCategoryID, Timestamp proposalStartedDateTime, Timestamp proposalEndedDateTime,
-			String proposalEmail, String proposalCellphone, String proposalSummary,
-			byte[] proposalPicture, byte[] proposalPictureZip, String memID, String proposalPictureBase64,
-			String proposalPictureBaseZip64, long proposalStartedDateTimeMillis, long proposalEndedDateTimeMillis) {
+
+	public ProposalBean(String proposalName, String proposalHostName, Integer proposalGoal, String proposalCategoryID,
+			Timestamp proposalStartedDateTime, Timestamp proposalEndedDateTime, String proposalEmail,
+			String proposalCellphone, String proposalSummary, String proposalHtmlContent, byte[] proposalPicture,
+			byte[] proposalPictureZip, String memID, String proposalPictureBase64, String proposalPictureBaseZip64,
+			long proposalStartedDateTimeMillis, long proposalEndedDateTimeMillis, long currentMillis,
+			long proposalAmount, String page) {
 		super();
 		this.proposalName = proposalName;
 		this.proposalHostName = proposalHostName;
@@ -79,6 +83,7 @@ public class ProposalBean {
 		this.proposalEmail = proposalEmail;
 		this.proposalCellphone = proposalCellphone;
 		this.proposalSummary = proposalSummary;
+		this.proposalHtmlContent = proposalHtmlContent;
 		this.proposalPicture = proposalPicture;
 		this.proposalPictureZip = proposalPictureZip;
 		this.memID = memID;
@@ -86,9 +91,12 @@ public class ProposalBean {
 		this.proposalPictureBaseZip64 = proposalPictureBaseZip64;
 		this.proposalStartedDateTimeMillis = proposalStartedDateTimeMillis;
 		this.proposalEndedDateTimeMillis = proposalEndedDateTimeMillis;
+		this.currentMillis = currentMillis;
+		this.proposalAmount = proposalAmount;
+		this.page = page;
 	}
 
-	
+
 	@Override
 	public String toString() {
 		return "ProposalBean [proposalID=" + proposalID + ", proposalName=" + proposalName + ", proposalHostName="
@@ -98,12 +106,17 @@ public class ProposalBean {
 				+ proposalCellphone + ", proposalSummary=" + proposalSummary + ", proposalHtmlContent="
 				+ proposalHtmlContent + ", memID=" + memID + ", proposalStartedDateTimeMillis="
 				+ proposalStartedDateTimeMillis + ", proposalEndedDateTimeMillis=" + proposalEndedDateTimeMillis
-				+ ", currentMillis=" + currentMillis + ", proposalAmount=" + proposalAmount + "]";
+				+ ", currentMillis=" + currentMillis + ", proposalAmount=" + proposalAmount + ", page=" + page + "]";
 	}
 
 
 	public Integer getProposalID() {
 		return proposalID;
+	}
+
+
+	public void setProposalID(Integer proposalID) {
+		this.proposalID = proposalID;
 	}
 
 
@@ -197,6 +210,16 @@ public class ProposalBean {
 	}
 
 
+	public String getProposalHtmlContent() {
+		return proposalHtmlContent;
+	}
+
+
+	public void setProposalHtmlContent(String proposalHtmlContent) {
+		this.proposalHtmlContent = proposalHtmlContent;
+	}
+
+
 	public byte[] getProposalPicture() {
 		return proposalPicture;
 	}
@@ -267,18 +290,36 @@ public class ProposalBean {
 	}
 
 
-	public String getHtml_content() {
-		return proposalHtmlContent;
+	public long getCurrentMillis() {
+		return currentMillis;
 	}
 
 
-	public void setHtml_content(String proposalHtmlContent) {
-		this.proposalHtmlContent = proposalHtmlContent;
+	public void setCurrentMillis(long currentMillis) {
+		this.currentMillis = currentMillis;
 	}
 
 
-	
-	
+	public long getProposalAmount() {
+		return proposalAmount;
+	}
+
+
+	public void setProposalAmount(long proposalAmount) {
+		this.proposalAmount = proposalAmount;
+	}
+
+
+	public String getPage() {
+		return page;
+	}
+
+
+	public void setPage(String page) {
+		this.page = page;
+	}
+
+
 	
 	
 	

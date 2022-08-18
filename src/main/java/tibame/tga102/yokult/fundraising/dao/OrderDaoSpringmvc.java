@@ -67,6 +67,13 @@ public class OrderDaoSpringmvc implements OrderDao {
 		return result;
 	}
 
+	@Override
+	public List<OrderBean> selectByMemberID(String memID) {
+		Query<OrderBean> qurey = this.session.createQuery("from OrderBean where memID = \'" + memID + "\'", OrderBean.class);
+		List<OrderBean> result = qurey.list();
+		return result;
+	}
+
 	public Integer selectLastID() {
 		OrderBean lastRow = (OrderBean) this.session
 				.createQuery("from OrderBean order by orderID desc", OrderBean.class).setMaxResults(1).uniqueResult();

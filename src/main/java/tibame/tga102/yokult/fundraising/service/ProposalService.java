@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import tibame.tga102.yokult.fundraising.dao.ProposalDao;
+import tibame.tga102.yokult.fundraising.vo.OrderBean;
 import tibame.tga102.yokult.fundraising.vo.ProposalBean;
 
 @Service
@@ -62,4 +63,14 @@ public class ProposalService {
 		}
 	}
 
+	
+	public List<ProposalBean> selectByOrderList(List<OrderBean> orderBeanList) {
+		List<ProposalBean> list_ProposalBean = new ArrayList<ProposalBean>();
+		for(OrderBean orderBean : orderBeanList) {
+			ProposalBean proposal = this.selectBean(orderBean.getProposalID());		
+			list_ProposalBean.add(proposal);
+		}
+		return list_ProposalBean;
+	}
+	
 }
