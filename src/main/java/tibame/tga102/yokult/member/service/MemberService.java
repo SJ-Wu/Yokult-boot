@@ -19,5 +19,5 @@ public interface MemberService {
 	
 	List<Member> query(String memEmail, String memID, String memName);
 	
-	boolean emailVerification(String code, Member member);
+	boolean emailVerification(Member member);
 }

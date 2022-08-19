@@ -6,7 +6,6 @@ import java.util.Map;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -27,8 +26,9 @@ public class AuthorizationCheckFilter extends OncePerRequestFilter {
 		String path = request.getServletPath();
 		boolean loginPath = (YokultConstants.MEMBER_API + "/login").equals(path);
 		boolean registerPath = (YokultConstants.MEMBER_API + "/register").equals(path);
+		boolean verifyPath = (YokultConstants.MEMBER_API + "/verify").equals(path);
 		boolean adminLoginPath = (YokultConstants.STAFF_API + "/login").equals(path);
-		return (loginPath || registerPath || adminLoginPath);
+		return (loginPath || registerPath || adminLoginPath || verifyPath);
 	}
 
 	// JWT implementation referenced from

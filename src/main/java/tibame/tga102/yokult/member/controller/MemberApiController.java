@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import tibame.tga102.yokult.member.service.MemberService;
 import tibame.tga102.yokult.member.vo.Member;
 import tibame.tga102.yokult.member.vo.MemberResponse;
@@ -23,14 +25,8 @@ import tibame.tga102.yokult.util.YokultConstants;
 @RequestMapping(path = { YokultConstants.MEMBER_API })
 public class MemberApiController {
 
-	@Autowired
+	@Autowired  
 	private MemberService memberService;
-	@Autowired
-	private MemberResponse memberResponse;
-	@Autowired
-	private Member member;
-
-	
 
 	@GetMapping(path = { "/{id}" })
 	public ResponseEntity<?> getMemberInfo(@PathVariable(name = "id") String memID) {
@@ -46,9 +42,9 @@ public class MemberApiController {
 		}
 	}
 
-
 	@PostMapping(path = { "/login" })
 	public ResponseEntity<?> login(@RequestBody Member member) {
+		MemberResponse memberResponse = new MemberResponse();
 		String jwtToken = memberService.login(member);
 		memberResponse.setMsg(jwtToken);
 		if (jwtToken != null) {
@@ -65,6 +61,7 @@ public class MemberApiController {
 
 	@PostMapping(path = { "/register" })
 	public ResponseEntity<?> register(@RequestBody Member member) {
+		MemberResponse memberResponse = new MemberResponse();
 		String msg = this.registerValidation(member);
 		if ("Pass".equals(msg)) {
 			Integer status = memberService.register(member);
@@ -90,12 +87,21 @@ public class MemberApiController {
 		}
 	}
 
-	@GetMapping(path = { "/verify" })
-	public ResponseEntity<?> verify(String code, String memID) {
-		member.setMemID(memID);
-		if (memberService.emailVerification(code, member)) {
-			memberResponse.setMsg("verification pass!");
-		} else {
+	@GetMapping(path = { "/verify/{token}" })
+	public ResponseEntity<?> verify(@PathVariable(name = "token") String token) {
+		MemberResponse memberResponse = new MemberResponse();
+		Member member = new Member();
+		try {
+			Claims claims = Jwts.parser().setSigningKey(YokultConstants.JWTKEY).parseClaimsJws(token).getBody();
+			System.out.println("JWT payload:" + claims.toString());
+			String memID = claims.getSubject();
+			member.setMemID(memID);
+			if (memberService.emailVerification(member)) {
+				memberResponse.setMsg("verification pass!");
+			} else {
+				memberResponse.setMsg("verification fail!");
+			}
+		} catch (Exception e) {
 			memberResponse.setMsg("verification fail!");
 		}
 		ResponseEntity<MemberResponse> response = ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON)
@@ -105,6 +111,8 @@ public class MemberApiController {
 
 	@DeleteMapping(path = { "/delete/{id}" })
 	public ResponseEntity<?> delete(@PathVariable(name = "id") String memID) {
+		MemberResponse memberResponse = new MemberResponse();
+		Member member = new Member();
 		member.setMemID(memID);
 		Integer status = memberService.remove(member);
 		if (status > 0) {
@@ -119,6 +127,7 @@ public class MemberApiController {
 
 	@PutMapping(path = { "/modify" })
 	public ResponseEntity<?> modify(@RequestBody Member member) {
+		MemberResponse memberResponse = new MemberResponse();
 		System.out.println(member);
 		Integer status = memberService.modify(member);
 		if (status > 0) {

@@ -26,8 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import tibame.tga102.yokult.jwt.JwtToken;
 import tibame.tga102.yokult.member.dao.MemberDao;
 import tibame.tga102.yokult.member.vo.Member;
 import tibame.tga102.yokult.util.YokultConstants;
@@ -80,9 +79,8 @@ public class MemberServiceImpl implements MemberService {
 		}
 		member = dao.selectByMemberIdAndPassword(member);
 		if (member != null) {
-			Date expireDate = new Date(System.currentTimeMillis() + 30 * 60 * 1000);
-			jwtToken = Jwts.builder().setSubject(member.getMemID()).setExpiration(expireDate)
-					.signWith(SignatureAlgorithm.HS512, YokultConstants.JWTKEY).compact();
+			Integer expriedMinutes = 30;
+			jwtToken = JwtToken.generate(member.getMemID(), expriedMinutes);
 			System.out.println("jwtToken: " + jwtToken);
 		}
 		return jwtToken;
@@ -90,10 +88,10 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public Integer register(Member member) {
-		// Generate verification code in memStatus;
-		GenAuthCode genAuthCode = new GenAuthCode();
-		String authCode = genAuthCode.generate();
-		member.setMemStatus(authCode);
+		String jwtToken;
+		Integer expriedMinutes = 30;
+		jwtToken = JwtToken.generate(member.getMemID(), expriedMinutes);
+		member.setMemStatus("UNVERIFY");
 		// Insert in persistence.
 		Integer status = dao.insert(member);
 		if (status > 0) {
@@ -101,8 +99,7 @@ public class MemberServiceImpl implements MemberService {
 			String to = member.getMemEmail();
 //			String subject = "Yokult會員認證信件";
 
-			String verifysite = "http://localhost:8080/yokult/api/0.02/member/verify?memID=" + member.getMemID()
-					+ "&code=" + authCode;
+			String verifysite = "http://localhost:8080/yokult" + YokultConstants.MEMBER_API + "/verify/" + jwtToken;
 			String messageText = "Hello! " + member.getMemName() + " 請點擊連結以驗證信箱: " + verifysite + "\n";
 			System.out.println("Receiver:" + to);
 			System.out.println(messageText);
@@ -134,13 +131,9 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public boolean emailVerification(String code, Member member) {
-		String verifyCode = dao.selectByMemberID(member.getMemID()).getMemStatus();
-		if (verifyCode.equals(code)) {
-			member.setMemStatus("APPROVED");
-			return (dao.updateStatus(member) > 0) ? true : false;
-		}
-		return false;
+	public boolean emailVerification(Member member) {
+		member.setMemStatus("APPROVED");
+		return (dao.updateStatus(member) > 0) ? true : false;
 	}
 
 }
