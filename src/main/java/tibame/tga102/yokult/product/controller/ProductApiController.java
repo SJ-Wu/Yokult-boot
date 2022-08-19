@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import tibame.tga102.yokult.product.service.ProductService;
 import tibame.tga102.yokult.product.vo.Product;
@@ -85,7 +84,7 @@ public class ProductApiController {
 				String filename = sDateFormat.format(new Date()) + "_" + part.getSubmittedFileName();
 				File f = new File(fSaveDirectory, filename);
 				part.write(f.toString());
-				imagePath = "http://localhost:8080/yokult"+ saveDirectory + "/" + filename;
+				imagePath = YokultConstants.HOST_URL+ saveDirectory + "/" + filename;
 				System.out.println("image path: " + imagePath);
 			}
 			respObject.put("msg", "success");

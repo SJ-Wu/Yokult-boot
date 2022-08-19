@@ -20,6 +20,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import tibame.tga102.yokult.util.YokultConstants;
 
+@WebFilter
 public class AuthorizationCheckFilter extends OncePerRequestFilter {
 
 	@Override
@@ -28,7 +29,9 @@ public class AuthorizationCheckFilter extends OncePerRequestFilter {
 		boolean loginPath = (YokultConstants.MEMBER_API + "/login").equals(path);
 		boolean registerPath = (YokultConstants.MEMBER_API + "/register").equals(path);
 		boolean adminLoginPath = (YokultConstants.STAFF_API + "/login").equals(path);
-		return (loginPath || registerPath || adminLoginPath);
+		boolean productListPath = (YokultConstants.PRODUCT_API).equals(path); 
+		boolean doOption = "OPTIONS".equals(request.getMethod());
+		return (loginPath || registerPath || adminLoginPath || productListPath || doOption);
 	}
 
 	// JWT implementation referenced from
@@ -39,7 +42,7 @@ public class AuthorizationCheckFilter extends OncePerRequestFilter {
 
 		String authorHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 		String bearer = "Bearer";
-		System.out.println(authorHeader);
+		System.out.println("authHeader: "+authorHeader);
 		if (authorHeader != null && authorHeader.startsWith(bearer)) {
 			try {
 				String token = authorHeader.substring(bearer.length());
