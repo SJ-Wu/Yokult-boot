@@ -11,16 +11,17 @@ import tibame.tga102.yokult.nurse.service.ScheduleService;
 import tibame.tga102.yokult.nurse.vo.ResultSchedule;
 
 @RestController
-public class ScheduleController{
-	
+public class ScheduleController {
+
 	@Autowired
 	ScheduleService sheduleService;
 
+	// 取得班表資料
 	@RequestMapping(value = "/getScheduleAllData", method = RequestMethod.POST)
-	protected List<ResultSchedule> doPost(){
+	protected List<ResultSchedule> scheduleAllData() {
 		System.out.println("this Schedule");
 		return sheduleService.getAll();
-		
+
 	}
-	
+
 }

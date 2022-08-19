@@ -8,7 +8,6 @@ import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import tibame.tga102.yokult.nurse.vo.Schedule;
-import tibame.tga102.yokult.staff.vo.Staff;
 @Repository
 public class ScheduleDao {
 	@PersistenceContext
@@ -22,20 +21,6 @@ public class ScheduleDao {
 
 	public List<Schedule> selectAll() {
 		return session.createNativeQuery(SELECTALL, Schedule.class).getResultList();
-	}
-
-
-	public Integer insert(Schedule schedule) {
-		return -1;
-	}
-	
-	public Integer update(Schedule schedule) {
-		return -1;
-	}
-
-	
-	public Staff selectByStaffId(String StaffId) {
-		return null;
 	}
 
 }

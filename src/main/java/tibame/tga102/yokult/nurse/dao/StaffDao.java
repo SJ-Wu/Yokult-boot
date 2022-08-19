@@ -37,17 +37,12 @@ public class StaffDao {
 	}
 
 	@Transactional
-	public Integer update(Staff staff) {
+	public void update(Staff staff) {
 		session.update(staff);
-		return -1;
 	}
 
 	public void delete(Staff staff) {
 		session.delete(session.merge(staff));
-	}
-
-	public Staff selectByStaff_idAndstaff_idnumber(Staff staff) {
-		return null;
 	}
 
 }
