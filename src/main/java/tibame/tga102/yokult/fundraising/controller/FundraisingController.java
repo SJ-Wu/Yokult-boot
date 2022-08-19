@@ -1,15 +1,25 @@
 package tibame.tga102.yokult.fundraising.controller;
 
+import java.io.BufferedOutputStream;
+import java.io.Console;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.hibernate.Session;
+import org.hibernate.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.codec.multipart.Part;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -27,6 +38,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 
+import tibame.tga102.yokult.fundraising.common.HtmlDatetimeLocalToSQLDateTimeUtil;
 import tibame.tga102.yokult.fundraising.service.OrderService;
 import tibame.tga102.yokult.fundraising.service.PlanService;
 import tibame.tga102.yokult.fundraising.service.PostNumberService;
@@ -56,6 +68,8 @@ public class FundraisingController{
 	@Autowired
 	OrderService orderService;
 	
+
+//	OK
 //	=======================================  查詢全部proposal  =====================================
 	@PostMapping(path = "/ProposalGetAll")
 	public Map<String ,Object> ProposalGetAll() {
@@ -72,39 +86,15 @@ public class FundraisingController{
     	return respObject;
 	}
 
-		
-//	===================================  僅查詢一個proposal + 一個plan + post + 會員資訊 =================================
-	@PostMapping(path = "/ProposalGetOne")
-	public Map<String ,Object> ProposalGetOne(@RequestBody ProposalBean pb) {
-		ProposalBean proposalQueryResult = proposalService.selectBean(Integer.parseInt(pb.getPage()));
-		System.out.println("proposalBean : " + proposalQueryResult);
-		
-		List<PlanBean> planQueryResult = planService.selectBeansByProposal(proposalQueryResult);
-		
-//		List<PostBean> postQueryResult = postService.selectAllBeansByMemberID(member.getMemID());
-		List<PostBean> postQueryResult = postService.selectAllBeansByMemberID("TGA001");
-		
-		Map<String ,Object> respObject = new HashMap<String, Object>();
-    	if(proposalQueryResult != null) {
-			respObject.put("msg", "ProposalGetOne success");
-			respObject.put("Proposal", proposalQueryResult);
-			respObject.put("Plans", planQueryResult);
-			respObject.put("Posts", postQueryResult);
-    	}else {
-			respObject.put("msg", "ProposalGetOne fail");
-			respObject.put("Proposal", proposalQueryResult);
-    	}
-    	System.out.println(respObject.get("msg"));
-    	return respObject;
-	}
 	
-	
+//	OK
 //	===================================  僅查詢自己的proposal + plan + 會員資訊 =================================
 	@PostMapping(path = "/ProposalGetMine")
-	public Map<String ,Object> ProposalGetMine() throws IOException {
+	public Map<String ,Object> ProposalGetMine(@RequestBody ProposalBean pb) throws IOException {
 
+		System.out.println(pb.getMemID());
 //    	List<ProposalBean> allMyProposalBeans = proposalService.selectMyAllBeans(member.getMemID());
-    	List<ProposalBean> allMyProposalBeans = proposalService.selectMyAllBeans("TGA001");
+    	List<ProposalBean> allMyProposalBeans = proposalService.selectMyAllBeans(pb.getMemID());
     	List<Object> proposalPlanList = new ArrayList<Object>();
     	for(ProposalBean proposalBean : allMyProposalBeans) {
     		List<PlanBean> planQueryResult = planService.selectBeansByProposal(proposalBean);
@@ -124,12 +114,12 @@ public class FundraisingController{
     	return respObject;
 	}
 	
-	
+//	OK
 //	===================================  查詢自己訂單的proposal + plan + 會員資訊 =================================
 	@PostMapping(path = "/ProposalGetMyOrder")
-	public Map<String ,Object> ProposalGetMyOrder() {
-//	    List<OrderBean> list_Order = orderService.selectAllBeans(member.getMemID());
-	    List<OrderBean> list_Order = orderService.selectMyOrderBeans("TGA001");
+	public Map<String ,Object> ProposalGetMyOrder(@RequestBody ProposalBean pb) {
+		System.out.println(pb.getMemID());
+	    List<OrderBean> list_Order = orderService.selectMyOrderBeans(pb.getMemID());
 	    List<ProposalBean> list_Proposal = proposalService.selectByOrderList(list_Order);
 	    List<PlanBean> list_Plan = planService.selectByOrderList(list_Order);
 
@@ -147,7 +137,81 @@ public class FundraisingController{
     	return respObject;
 	}
 	
+//	OK
+//	=========================================  新增一個proposal  =========================================
+	@PostMapping(path = "/ProposalInsert")
+	public Map<String, Object> ProposalInsert(
+			@RequestParam Map<String, Object> input,
+			@RequestParam Map<String, MultipartFile> files) throws IOException {
+		
+		ProposalBean proposalBean = null;
+		if(input != null && files != null) {
+			proposalBean = new ProposalBean();
+			
+			try {
+//				System.out.println(files.get("proposalHtmlContent").getName());
+				InputStream is = files.get("proposalHtmlContent").getInputStream();
+				byte[] sourceBytes = is.readAllBytes();
+				String str = new String(sourceBytes);
+//				System.out.println(str);
+				proposalBean.setProposalHtmlContent(str);
+			}catch (Exception e) {
+			}
+			
+			try {
+//				System.out.println(files.get("proposalPicture").getName());
+				InputStream is = files.get("proposalPicture").getInputStream();
+				byte[] sourceBytes = is.readAllBytes();
+				proposalBean.setProposalPicture(sourceBytes);
+			}catch (Exception e) {
+			}
+			
+			try {
+//				System.out.println(files.get("proposalPictureZip").getName());
+				InputStream is = files.get("proposalPictureZip").getInputStream();
+				byte[] sourceBytes = is.readAllBytes();
+				proposalBean.setProposalPictureZip(sourceBytes);
+			}catch (Exception e) {
+			}
+			
+			proposalBean.setProposalName(input.get("proposalName").toString());
+			proposalBean.setProposalHostName(input.get("proposalHostName").toString());
+			proposalBean.setProposalGoal(Integer.parseInt(input.get("proposalGoal").toString()));
+			proposalBean.setProposalCategoryID(input.get("proposalCategory").toString());
+			
+			java.sql.Timestamp startDate = HtmlDatetimeLocalToSQLDateTimeUtil.parseDateTime(input.get("proposalStartedDateTime").toString());
+			proposalBean.setProposalStartedDateTime(startDate);
+			java.sql.Timestamp endDate = HtmlDatetimeLocalToSQLDateTimeUtil.parseDateTime(input.get("proposalEndedDateTime").toString());
+			proposalBean.setProposalEndedDateTime(endDate);
+			
+			proposalBean.setProposalEmail(input.get("proposalEmail").toString());
+			proposalBean.setProposalCellphone(input.get("proposalCellphone").toString());
+			proposalBean.setProposalSummary(input.get("proposalSummary").toString());
+			proposalBean.setMemID(input.get("memID").toString());
+			
+//			System.out.println("print ProposalBean");
+//			System.out.println(proposalBean);
+		}
+
+	//	執行存入(MySQL)
+		try {
+	//    	== 將前端 newProposal頁面 form參數傳入對應的bean資訊 ==
+			proposalService.insertBean(proposalBean);
+		} catch (Exception e) {}
+		
+		Map<String ,Object> respObject = new HashMap<String, Object>();
+    	if(proposalBean != null) {
+			respObject.put("msg", "ProposalInsert success");
+    	}else {
+			respObject.put("msg", "ProposalInsert fail");
+    	}
+    	System.out.println(respObject.get("msg"));
+    	return respObject;
+	}
+}	
+	///////////////////////////////////////////////////////////////////////////
 	
+
 //	    
 ////	    == 檢查前端form資料 ==
 ////	   	如果有的話，建立檢視template並逐個列印參數，但不含upload file！！！
@@ -593,4 +657,4 @@ public class FundraisingController{
 //
 //	}
 
-}
+

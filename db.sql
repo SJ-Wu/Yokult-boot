@@ -1067,7 +1067,7 @@ insert into `fund_proposal` (
                             <img src="./img/fundraising/proposal-1/content/price-3_XXX.jpg" class="article">
                         </ul>
                     </div>',
-'TGA002'
+'TGA001'
 ),
 (
 '環保牙刷計畫 | 刷牙當然也要用最天然的', 
@@ -1125,7 +1125,7 @@ insert into `fund_proposal` (
                             <img src="./img/fundraising/proposal-1/content/price-3_XXX.jpg" class="article">
                         </ul>
                     </div>',
-'TGA002'
+'TGA001'
 );
 
 

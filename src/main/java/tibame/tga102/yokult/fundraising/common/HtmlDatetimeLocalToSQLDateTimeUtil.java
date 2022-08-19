@@ -5,7 +5,7 @@ import java.text.ParseException;
 import javax.servlet.http.HttpServletRequest;
 
 public class HtmlDatetimeLocalToSQLDateTimeUtil {
-	public static java.sql.Timestamp parseDateTime(HttpServletRequest req, String DateTimefromHTML) {
+	public static java.sql.Timestamp parseDateTime(String DateTimefromHTML) {
 		try {
 			java.text.SimpleDateFormat formatter = new java.text.SimpleDateFormat("yyyy-MM-dd hh:mm");
 		    
@@ -23,7 +23,7 @@ public class HtmlDatetimeLocalToSQLDateTimeUtil {
 		return null;
 	}
 	
-	public static java.sql.Date parseDate(HttpServletRequest req, String DateTimefromHTML) {
+	public static java.sql.Date parseDate(String DateTimefromHTML) {
 		try {
 			java.text.SimpleDateFormat formatter = new java.text.SimpleDateFormat("yyyy-MM-dd");
 		    
