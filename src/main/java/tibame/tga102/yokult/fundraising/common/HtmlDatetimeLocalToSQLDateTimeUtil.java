@@ -27,11 +27,11 @@ public class HtmlDatetimeLocalToSQLDateTimeUtil {
 		try {
 			java.text.SimpleDateFormat formatter = new java.text.SimpleDateFormat("yyyy-MM-dd");
 		    
-	    	String[] stringList = DateTimefromHTML.split("T");
-		    String reorganization = stringList[0];
+//	    	String[] stringList = DateTimefromHTML.split("T");
+//		    String reorganization = stringList[0];
 		    java.util.Date date = null;
 			try {
-				date = formatter.parse(reorganization);
+				date = formatter.parse(DateTimefromHTML);
 			} catch (ParseException e) {}
 			java.sql.Date startTimestamp = new java.sql.Date(date.getTime());
 			

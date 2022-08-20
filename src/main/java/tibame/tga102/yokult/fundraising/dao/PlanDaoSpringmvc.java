@@ -42,15 +42,23 @@ public class PlanDaoSpringmvc implements PlanDao {
 	}
 
 	@Override
-	public PlanBean update(Integer id, PlanBean planBean) {
+	public Boolean update(Integer id, PlanBean planBean) {
 		if(id != null && id > 0 && planBean != null && planBean.getPlanID() == null) {			
 			PlanBean update = this.session.get(PlanBean.class, id);
 			if(update != null) {
+				update.setPlanName(planBean.getPlanName());
+				update.setPlanAmount(planBean.getPlanAmount());
+				update.setPlanContent(planBean.getPlanContent());
+				update.setPlanPostNote(planBean.getPlanPostNote());
+				update.setPlanPostDate(planBean.getPlanPostDate());
+				update.setPlanStartedDateTime(planBean.getPlanStartedDateTime());
+				update.setPlanEndedDateTime(planBean.getPlanEndedDateTime());
+				update.setPlanPicture(planBean.getPlanPicture());
 				this.session.save(update);
-				return update;				
+				return true;				
 			}
 		}
-		return null;
+		return false;
 	}
 
 	@Override

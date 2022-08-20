@@ -21,4 +21,7 @@ public class PostNumberService {
 	public List<PostNumberBean> selectAllBeans() {
 		return this.postnumberDAO.selectAll();
 	}
+	public PostNumberBean selectBeanByCityArea(String postCity , String postArea) {
+		return this.postnumberDAO.selectSID(postCity , postArea);
+	}
 }

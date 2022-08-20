@@ -1,6 +1,7 @@
 package tibame.tga102.yokult.fundraising.vo;
 
 import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.Base64;
 
 import javax.persistence.Column;
@@ -97,6 +98,9 @@ public class ProposalBean {
 	}
 
 
+
+
+
 	@Override
 	public String toString() {
 		return "ProposalBean [proposalID=" + proposalID + ", proposalName=" + proposalName + ", proposalHostName="
@@ -104,19 +108,17 @@ public class ProposalBean {
 				+ ", proposalStartedDateTime=" + proposalStartedDateTime + ", proposalEndedDateTime="
 				+ proposalEndedDateTime + ", proposalEmail=" + proposalEmail + ", proposalCellphone="
 				+ proposalCellphone + ", proposalSummary=" + proposalSummary + ", proposalHtmlContent="
-				+ proposalHtmlContent + ", memID=" + memID + ", proposalStartedDateTimeMillis="
-				+ proposalStartedDateTimeMillis + ", proposalEndedDateTimeMillis=" + proposalEndedDateTimeMillis
-				+ ", currentMillis=" + currentMillis + ", proposalAmount=" + proposalAmount + ", page=" + page + "]";
+				+ proposalHtmlContent + ", proposalPicture=" + Arrays.toString(proposalPicture)
+				+ ", proposalPictureZip=" + Arrays.toString(proposalPictureZip) + ", memID=" + memID
+				+ ", proposalPictureBase64=" + proposalPictureBase64 + ", proposalPictureBaseZip64="
+				+ proposalPictureBaseZip64 + ", proposalStartedDateTimeMillis=" + proposalStartedDateTimeMillis
+				+ ", proposalEndedDateTimeMillis=" + proposalEndedDateTimeMillis + ", currentMillis=" + currentMillis
+				+ ", proposalAmount=" + proposalAmount + ", page=" + page + "]";
 	}
 
 
 	public Integer getProposalID() {
 		return proposalID;
-	}
-
-
-	public void setProposalID(Integer proposalID) {
-		this.proposalID = proposalID;
 	}
 
 

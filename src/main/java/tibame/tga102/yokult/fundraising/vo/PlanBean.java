@@ -27,8 +27,8 @@ public class PlanBean {
 	private String planContent;
 	private String planPostNote;
 	private java.sql.Date planPostDate;
-	private Timestamp planStartedDateTime;
-	private Timestamp planEndedDateTime;
+	private java.sql.Date planStartedDateTime;
+	private java.sql.Date planEndedDateTime;
 	@Lob
 	@Column(columnDefinition="MEDIUMBLOB")
 	private byte[] planPicture;
@@ -55,27 +55,9 @@ public class PlanBean {
 	
 	public PlanBean() {}
 
-
-	public PlanBean(Integer planID, String planName, Integer planAmount, String planContent, String planPostNote,
-			java.sql.Date planPostDate, Timestamp planStartedDateTime, Timestamp planEndedDateTime, byte[] planPicture,
-			Integer proposalID, Integer planPurchases, String planPictureBase64) {
-		super();
-		this.planID = planID;
-		this.planName = planName;
-		this.planAmount = planAmount;
-		this.planContent = planContent;
-		this.planPostNote = planPostNote;
-		this.planPostDate = planPostDate;
-		this.planStartedDateTime = planStartedDateTime;
-		this.planEndedDateTime = planEndedDateTime;
-		this.planPicture = planPicture;
-		this.proposalID = proposalID;
-		this.planPurchases = planPurchases;
-		this.planPictureBase64 = planPictureBase64;
-	}
 	
 	public PlanBean(String planName, Integer planAmount, String planContent, String planPostNote,
-			java.sql.Date planPostDate, Timestamp planStartedDateTime, Timestamp planEndedDateTime, byte[] planPicture,
+			java.sql.Date planPostDate, java.sql.Date planStartedDateTime, java.sql.Date planEndedDateTime, byte[] planPicture,
 			Integer proposalID, Integer planPurchases, String planPictureBase64) {
 		super();
 		this.planName = planName;
@@ -102,10 +84,17 @@ public class PlanBean {
 				+ planStartedDateTimeMillis + ", planEndedDateTimeMillis=" + planEndedDateTimeMillis + "]";
 	}
 
+
+
+
+
 	public Integer getPlanID() {
 		return planID;
 	}
 
+	public void setPlanID(Integer planID) {
+		this.planID = planID;
+	}
 
 	public String getPlanName() {
 		return planName;
@@ -147,19 +136,19 @@ public class PlanBean {
 		this.planPostDate = planPostDate;
 	}
 
-	public Timestamp getPlanStartedDateTime() {
+	public java.sql.Date getPlanStartedDateTime() {
 		return planStartedDateTime;
 	}
 
-	public void setPlanStartedDateTime(Timestamp planStartedDateTime) {
+	public void setPlanStartedDateTime(java.sql.Date planStartedDateTime) {
 		this.planStartedDateTime = planStartedDateTime;
 	}
 
-	public Timestamp getPlanEndedDateTime() {
+	public java.sql.Date getPlanEndedDateTime() {
 		return planEndedDateTime;
 	}
 
-	public void setPlanEndedDateTime(Timestamp planEndedDateTime) {
+	public void setPlanEndedDateTime(java.sql.Date planEndedDateTime) {
 		this.planEndedDateTime = planEndedDateTime;
 	}
 

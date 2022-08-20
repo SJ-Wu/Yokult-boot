@@ -47,6 +47,7 @@ import tibame.tga102.yokult.fundraising.service.ProposalService;
 import tibame.tga102.yokult.fundraising.vo.OrderBean;
 import tibame.tga102.yokult.fundraising.vo.PlanBean;
 import tibame.tga102.yokult.fundraising.vo.PostBean;
+import tibame.tga102.yokult.fundraising.vo.PostNumberBean;
 import tibame.tga102.yokult.fundraising.vo.ProposalBean;
 import tibame.tga102.yokult.member.service.MemberService;
 
@@ -86,6 +87,172 @@ public class FundraisingController{
     	return respObject;
 	}
 
+
+	
+//	OK===
+//	===================================  僅查詢一個proposal + 一個plan + post + 會員資訊 =================================
+	@PostMapping(path = "/ProposalGetOne")
+	public Map<String ,Object> ProposalGetOne(@RequestBody ProposalBean pb, HttpServletRequest request) {
+		
+		String test = request.getRequestURI();
+		System.out.println(test);
+		
+		ProposalBean proposalQueryResult = proposalService.selectBean(Integer.parseInt(pb.getPage()));
+		System.out.println("proposalBean : " + proposalQueryResult);
+		
+		List<PlanBean> planQueryResult = planService.selectBeansByProposal(proposalQueryResult);
+		
+		List<PostBean> postQueryResult;
+		if(pb.getMemID() != null) {
+			postQueryResult = postService.selectAllBeansByMemberID(pb.getMemID());
+		}else {
+			postQueryResult = new ArrayList<PostBean>();
+		}
+		
+		Map<String ,Object> respObject = new HashMap<String, Object>();
+    	if(proposalQueryResult != null) {
+			respObject.put("msg", "ProposalGetOne success");
+			respObject.put("Proposal", proposalQueryResult);
+			respObject.put("Plans", planQueryResult);
+			respObject.put("Posts", postQueryResult);
+    	}else {
+			respObject.put("msg", "ProposalGetOne fail");
+			respObject.put("Proposal", proposalQueryResult);
+    	}
+    	System.out.println(respObject.get("msg"));
+    	return respObject;
+	}
+	
+	
+
+	
+//	OK===
+//	===================================  僅查詢post + 會員資訊 =================================
+	@PostMapping(path = "/PostGetMine")
+	public Map<String ,Object> PostGetMine(@RequestBody PostBean pb) {
+		
+		List<PostBean> postQueryResult;
+		if(pb.getMemID() != null) {
+			postQueryResult = postService.selectAllBeansByMemberID(pb.getMemID());
+		}else {
+			postQueryResult = new ArrayList<PostBean>();
+		}
+		
+		Map<String ,Object> respObject = new HashMap<String, Object>();
+    	if(postQueryResult != null) {
+			respObject.put("msg", "PostGetMine success");
+			respObject.put("Posts", postQueryResult);
+    	}else {
+			respObject.put("msg", "PostGetMine fail");
+			respObject.put("Posts", postQueryResult);
+    	}
+    	System.out.println(respObject.get("msg"));
+    	return respObject;
+	}
+	
+	
+//	OK===
+//	===================================  新增post + 會員資訊 =================================
+	@PostMapping(path = "/PostInsert")
+	public Map<String ,Object> PostInsert(@RequestParam Map<String, Object> input) {
+		
+		PostBean bean = null;
+		PostBean postBean = null;
+		if(input != null && input.get("memID") != null) {
+			bean = new PostBean();
+			
+			bean.setPostFisrtName(input.get("postFisrtName").toString());
+			bean.setPostLastName(input.get("postLastName").toString());
+			bean.setPostCellphone(input.get("postCellphone").toString());
+			bean.setPostAddress(input.get("postAddress").toString());
+			bean.setMemID(input.get("memID").toString());
+			bean.setPostNickName(input.get("postNickName").toString());
+			bean.setPostCity(input.get("postCity").toString());
+			bean.setPostArea(input.get("postArea").toString());
+			
+			PostNumberBean postNumberBean = postnumberService.selectBeanByCityArea(bean.getPostCity() , bean.getPostArea());
+			bean.setPost_SID(postNumberBean.getPost_SID());
+			
+			postBean = postService.insertBean(bean);
+		}
+		
+		Map<String ,Object> respObject = new HashMap<String, Object>();
+    	if(postBean != null) {
+			respObject.put("msg", "PostInsert success");
+			respObject.put("Post", postBean);
+    	}else {
+			respObject.put("msg", "PostInsert fail");
+			respObject.put("Post", postBean);
+    	}
+    	System.out.println(respObject.get("msg"));
+    	return respObject;
+	}
+	
+
+	
+//	OK===
+//	===================================  修改post + 會員資訊 =================================
+	@PostMapping(path = "/PostModify")
+	public Map<String ,Object> PostModify(@RequestParam Map<String, Object> input) {
+		
+		PostBean bean = null;
+		PostBean postBean = null;
+		if(input != null && input.get("memID") != null) {
+			bean = new PostBean();
+			
+			bean.setPostFisrtName(input.get("postFisrtName").toString());
+			bean.setPostLastName(input.get("postLastName").toString());
+			bean.setPostCellphone(input.get("postCellphone").toString());
+			bean.setPostAddress(input.get("postAddress").toString());
+			bean.setMemID(input.get("memID").toString());
+			bean.setPostNickName(input.get("postNickName").toString());
+			bean.setPostCity(input.get("postCity").toString());
+			bean.setPostArea(input.get("postArea").toString());
+			
+			PostNumberBean postNumberBean = postnumberService.selectBeanByCityArea(bean.getPostCity() , bean.getPostArea());
+			bean.setPost_SID(postNumberBean.getPost_SID());
+			
+			System.out.println("bean : " + bean);
+			
+			
+			postBean = postService.updateBean(Integer.parseInt(input.get("postID").toString()), bean);
+		}
+		
+		Map<String ,Object> respObject = new HashMap<String, Object>();
+    	if(postBean != null) {
+			respObject.put("msg", "PostModify success");
+			respObject.put("Post", postBean);
+    	}else {
+			respObject.put("msg", "PostModify fail");
+			respObject.put("Post", postBean);
+    	}
+    	System.out.println(respObject.get("msg"));
+    	return respObject;
+	}
+	
+	
+	
+//	OK===
+//	===================================  刪除post + 會員資訊 =================================
+	@PostMapping(path = "/PostRemove")
+	public Map<String ,Object> PostRemove(@RequestBody PostBean pb) {
+		
+		Boolean result = postService.deleteBean(pb.getPostID());
+		
+		Map<String ,Object> respObject = new HashMap<String, Object>();
+    	if(result == true) {
+			respObject.put("msg", "PostRemove success");
+			respObject.put("planID", pb.getPostID());
+			respObject.put("planName", pb.getPostNickName());
+    	}else {
+			respObject.put("msg", "PostRemove fail");
+			respObject.put("planID", pb.getPostID());
+    	}
+    	System.out.println(respObject.get("msg"));
+    	return respObject;
+	}
+	
+	
 	
 //	OK
 //	===================================  僅查詢自己的proposal + plan + 會員資訊 =================================
@@ -137,6 +304,140 @@ public class FundraisingController{
     	return respObject;
 	}
 	
+
+//	======================================== 移除一個plan ===============================================
+	@PostMapping(path = "/PlanRemove")
+	public Map<String ,Object> PlanRemove(@RequestBody PlanBean pb) {
+		
+		Boolean result = planService.deleteBean(pb.getPlanID());
+		
+		Map<String ,Object> respObject = new HashMap<String, Object>();
+    	if(result == true) {
+			respObject.put("msg", "PlanRemove success");
+			respObject.put("planID", pb.getPlanID());
+			respObject.put("planName", pb.getPlanName());
+    	}else {
+			respObject.put("msg", "PlanRemove fail");
+			respObject.put("planID", pb.getPlanID());
+    	}
+    	System.out.println(respObject.get("msg"));
+    	return respObject;
+	}
+	
+	
+
+//	======================================== 修改一個plan ===============================================
+	@PostMapping(path = "/PlanModify")
+	public Map<String ,Object> PlanModify(
+			@RequestParam Map<String, Object> input,
+			@RequestParam Map<String, MultipartFile> files) {
+		
+		PlanBean bean = null;
+		Map<String ,Object> respObject = null;
+		if(input != null && input.get("planID").toString() != "") {
+			bean = new PlanBean();
+			
+			try {
+				if(files.get("planPicture") == null) {
+					byte[] byteArray = planService.selectBean(Integer.parseInt(input.get("planID").toString())).getPlanPicture();
+					bean.setPlanPicture(byteArray);
+				}else {
+					InputStream is = files.get("planPicture").getInputStream();
+					byte[] sourceBytes = is.readAllBytes();
+					bean.setPlanPicture(sourceBytes);
+				}
+			}catch (Exception e) {
+			}
+			
+			System.out.println(input.get("planID"));
+			
+			bean.setPlanName(input.get("planName").toString());
+			bean.setPlanAmount(Integer.parseInt(input.get("planAmount").toString()));
+			bean.setPlanContent(input.get("planContent").toString());
+			bean.setPlanPostNote(input.get("planPostNote").toString());
+			
+			java.sql.Date planPostDate = HtmlDatetimeLocalToSQLDateTimeUtil.parseDate(input.get("planPostDate").toString());
+			bean.setPlanPostDate(planPostDate);
+			java.sql.Date planStartedDateTime = HtmlDatetimeLocalToSQLDateTimeUtil.parseDate(input.get("planStartedDateTime").toString());
+			bean.setPlanStartedDateTime(planStartedDateTime);
+			java.sql.Date planEndedDateTime = HtmlDatetimeLocalToSQLDateTimeUtil.parseDate(input.get("planEndedDateTime").toString());
+			bean.setPlanEndedDateTime(planEndedDateTime);
+			
+			bean.setProposalID(Integer.parseInt(input.get("proposalID").toString()));
+			
+			System.out.println("bean : " + bean);
+			Boolean resultBoolean = planService.updateBean(Integer.parseInt(input.get("planID").toString()), bean);
+			System.out.println("planService : "  + bean);
+		
+		respObject = new HashMap<String, Object>();
+    	if(resultBoolean == true) {
+			respObject.put("msg", "PlanModify success");
+			respObject.put("planID", bean.getPlanID());
+			respObject.put("planName", bean.getPlanName());
+    	}else {
+			respObject.put("msg", "PlanModify fail");
+			respObject.put("planID", bean.getPlanID());
+    	}
+    	System.out.println(respObject.get("msg"));
+		}
+		return respObject;
+	}
+	
+	
+	
+
+//	======================================== 新增一個plan ===============================================
+	@PostMapping(path = "/PlanInsert")
+	public Map<String ,Object> PlanInsert(
+			@RequestParam Map<String, Object> input,
+			@RequestParam Map<String, MultipartFile> files) {
+		
+		PlanBean bean = null;
+		Map<String ,Object> respObject = null;
+		if(input != null && input.get("proposalID").toString() != "") {
+			bean = new PlanBean();
+			
+			try {
+				InputStream is = files.get("planPicture").getInputStream();
+				byte[] sourceBytes = is.readAllBytes();
+				bean.setPlanPicture(sourceBytes);
+			}catch (Exception e) {
+			}
+			
+			bean.setPlanName(input.get("planName").toString());
+			bean.setPlanAmount(Integer.parseInt(input.get("planAmount").toString()));
+			bean.setPlanContent(input.get("planContent").toString());
+			bean.setPlanPostNote(input.get("planPostNote").toString());
+			
+			java.sql.Date planPostDate = HtmlDatetimeLocalToSQLDateTimeUtil.parseDate(input.get("planPostDate").toString());
+			bean.setPlanPostDate(planPostDate);
+			java.sql.Date planStartedDateTime = HtmlDatetimeLocalToSQLDateTimeUtil.parseDate(input.get("planStartedDateTime").toString());
+			bean.setPlanStartedDateTime(planStartedDateTime);
+			java.sql.Date planEndedDateTime = HtmlDatetimeLocalToSQLDateTimeUtil.parseDate(input.get("planEndedDateTime").toString());
+			bean.setPlanEndedDateTime(planEndedDateTime);
+			
+			bean.setProposalID(Integer.parseInt(input.get("proposalID").toString()));
+			
+			System.out.println("bean : " + bean);
+			PlanBean planBean = planService.insertBean(bean);
+			System.out.println("planService : "  + planBean);
+		
+		respObject = new HashMap<String, Object>();
+    	if(planBean != null) {
+			respObject.put("msg", "PlanInsert success");
+			respObject.put("planID", planBean.getPlanID());
+			respObject.put("planName", planBean.getPlanName());
+    	}else {
+			respObject.put("msg", "PlanInsert fail");
+			respObject.put("planID", planBean.getPlanID());
+    	}
+    	System.out.println(respObject.get("msg"));
+		}
+		return respObject;
+	}
+	
+	
+	
 //	OK
 //	=========================================  新增一個proposal  =========================================
 	@PostMapping(path = "/ProposalInsert")
@@ -149,17 +450,14 @@ public class FundraisingController{
 			proposalBean = new ProposalBean();
 			
 			try {
-//				System.out.println(files.get("proposalHtmlContent").getName());
 				InputStream is = files.get("proposalHtmlContent").getInputStream();
 				byte[] sourceBytes = is.readAllBytes();
 				String str = new String(sourceBytes);
-//				System.out.println(str);
 				proposalBean.setProposalHtmlContent(str);
 			}catch (Exception e) {
 			}
 			
 			try {
-//				System.out.println(files.get("proposalPicture").getName());
 				InputStream is = files.get("proposalPicture").getInputStream();
 				byte[] sourceBytes = is.readAllBytes();
 				proposalBean.setProposalPicture(sourceBytes);
@@ -167,7 +465,6 @@ public class FundraisingController{
 			}
 			
 			try {
-//				System.out.println(files.get("proposalPictureZip").getName());
 				InputStream is = files.get("proposalPictureZip").getInputStream();
 				byte[] sourceBytes = is.readAllBytes();
 				proposalBean.setProposalPictureZip(sourceBytes);
@@ -201,16 +498,38 @@ public class FundraisingController{
 		
 		Map<String ,Object> respObject = new HashMap<String, Object>();
     	if(proposalBean != null) {
-			respObject.put("msg", "ProposalInsert success");
+    		respObject.put("msg", "ProposalInsert success");
+    		respObject.put("proposalID", proposalBean.getProposalID());
+    		respObject.put("proposalName", proposalBean.getProposalName());
     	}else {
 			respObject.put("msg", "ProposalInsert fail");
+			respObject.put("proposalID", proposalBean.getProposalID());
     	}
     	System.out.println(respObject.get("msg"));
     	return respObject;
 	}
+	
+	
+	
+	
+	
+	
+	
 }	
 	///////////////////////////////////////////////////////////////////////////
 	
+
+
+
+
+
+
+
+
+
+
+
+
 
 //	    
 ////	    == 檢查前端form資料 ==

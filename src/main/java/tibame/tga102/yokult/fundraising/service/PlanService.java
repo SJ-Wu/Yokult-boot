@@ -24,7 +24,7 @@ public class PlanService {
 	public Boolean deleteBean(int id) {
 		return this.planDAO.delete(id);
 	}
-	public PlanBean updateBean(int id, PlanBean planBean) {
+	public Boolean updateBean(int id, PlanBean planBean) {
 		return this.planDAO.update(id, planBean);
 	}
 	
