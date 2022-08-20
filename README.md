@@ -19,7 +19,7 @@
     ·
     <a href="https://sj-wu.github.io/YokultAdmin/">View Admin Demo</a>
     ·
-    <a href="https://github.com/SJ-Wu/Yokult-boot/issues">View API docs</a>
+    <a href="YOKULT_API.html">View API docs</a>
     ·
   </p>
 </div>
@@ -30,6 +30,7 @@
 
 [![Product Name Screen Shot][product-screenshot1]](https://sj-wu.github.io/Yokult/)
 [![Product Name Screen Shot][product-screenshot2]](https://sj-wu.github.io/YokultAdmin/)
+[![Product Name Screen Shot][product-screenshot3]](YOKULT_API.html)
 This is our side-project in Tibame Bootcamp 2022. We build it by Spring Boot and Rest-ful API. There are two demos we built on github.io to show how the features work on the web.
 
 ## Built with
@@ -67,14 +68,10 @@ The list below is our features and contributors.
 
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [API-Document](https://example.com)_
+Please refer to the [API-Document](YOKULT_API.html).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 <!-- ACKNOWLEDGMENTS -->
-
 ## Acknowledgments
 
 -   [Tibame](https://www.tibame.com/)
@@ -101,3 +98,4 @@ _For more examples, please refer to the [API-Document](https://example.com)_
 [jwt-url]: https://jwt.io/
 [product-screenshot1]: images/user-page.png
 [product-screenshot2]: images/admin-page.png
+[product-screenshot3]: images/yokult-api.png
