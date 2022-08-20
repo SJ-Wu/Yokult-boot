@@ -28,7 +28,13 @@
 
 ## About The Project
 
-This is our side-project in Tibame Bootcamp 2022. We build it by Spring Boot and Rest-ful API and we build two demo webs on github.io.
+[![Product Name Screen Shot][product-screenshot1]](https://sj-wu.github.io/Yokult/)
+[![Product Name Screen Shot][product-screenshot2]](https://sj-wu.github.io/YokultAdmin/)
+This is our side-project in Tibame Bootcamp 2022. We build it by Spring Boot and Rest-ful API. There are two demos we built on github.io to show how the features work on the web.
+
+## Built with
+
+[![spring-boot]][spring-boot-url] [![Hibernate]][hibernate-url] [![mysql]][mysql-url] [![mongodb]][mongodb-url] [![jwt]][jwt-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -36,54 +42,35 @@ This is our side-project in Tibame Bootcamp 2022. We build it by Spring Boot and
 
 [![Contributors][contributors-shield]][contributors-url]
 
-### Built With
+-   Nick Wu - [@linked-in](https://www.linkedin.com/in/shengjuwu/) - nickwu0301@gmail.com
 
-[![spring-boot]][spring-boot-url]
-[![Hibernate]][hibernate-url]
-[![mysql]][mysql-url]
+    -   Github Link: [https://github.com/SJ-Wu/Yokult-boot](https://github.com/SJ-Wu/)
 
+-   Vicky Tsai
+-   Will Yu
+-   David Chiu
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 <!-- GETTING STARTED -->
 
-## Getting Started
+## Feature implements
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+The list below is our features and contributors.
 
-<!-- USAGE EXAMPLES -->
+1. User/Admin Login: Nick Wu
+2. Doctor Appointment: Vicky Tsai
+3. Shopping Cart: Peggy Chen
+4. Checkout/EC-Pay: Will Yu
+5. Article List: David Chiu
+6. Nurse Schedule:
+7. Fundrasing: Aiden Chen
+ <!-- USAGE EXAMPLES -->
 
 ## Usage
 
 Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+_For more examples, please refer to the [API-Document](https://example.com)_
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- ROADMAP -->
-
-## Roadmap
-
--   [ ] Feature 1
--   [ ] Feature 2
--   [ ] Feature 3
-    -   [ ] Nested Feature
-
-See the [open issues](https://github.com/SJ-Wu/Yokult-boot/issues) for a full list of proposed features (and known issues).
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- CONTACT -->
-
-## Contact
-
--   Nick Wu - [@linked-in](https://www.linkedin.com/in/shengjuwu/) - nickwu0301@gmail.com
-
-    -   Project Link: [https://github.com/SJ-Wu/Yokult-boot](https://github.com/SJ-Wu/Yokult-boot)
-
--   Vicky Tsai
--   Wii Yu
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- ACKNOWLEDGMENTS -->
@@ -99,14 +86,6 @@ See the [open issues](https://github.com/SJ-Wu/Yokult-boot/issues) for a full li
 
 [contributors-shield]: https://img.shields.io/github/contributors/SJ-Wu/Yokult-boot.svg?style=for-the-badge
 [contributors-url]: https://github.com/SJ-Wu/Yokult-boot/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/SJ-Wu/Yokult-boot.svg?style=for-the-badge
-[forks-url]: https://github.com/SJ-Wu/Yokult-boot/network/members
-[stars-shield]: https://img.shields.io/github/stars/SJ-Wu/Yokult-boot.svg?style=for-the-badge
-[stars-url]: https://github.com/SJ-Wu/Yokult-boot/stargazers
-[issues-shield]: https://img.shields.io/github/issues/SJ-Wu/Yokult-boot.svg?style=for-the-badge
-[issues-url]: https://github.com/SJ-Wu/Yokult-boot/issues
-[license-shield]: https://img.shields.io/github/license/SJ-Wu/Yokult-boot.svg?style=for-the-badge
-[license-url]: https://github.com/SJ-Wu/Yokult-boot/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/linkedin_username
 [product-screenshot]: images/screenshot.png
@@ -116,3 +95,9 @@ See the [open issues](https://github.com/SJ-Wu/Yokult-boot/issues) for a full li
 [hibernate-url]: https://hibernate.org/
 [mysql]: https://img.shields.io/badge/MySQL-Database-%239CF
 [mysql-url]: https://www.mysql.com/
+[mongodb]: https://img.shields.io/badge/MongoDB-Database-green
+[mongodb-url]: https://www.mongodb.com/
+[jwt]: https://img.shields.io/badge/JWT-Authorization-important
+[jwt-url]: https://jwt.io/
+[product-screenshot1]: images/user-page.png
+[product-screenshot2]: images/admin-page.png
