@@ -85,7 +85,7 @@ public class ProductApiController {
 				String filename = sDateFormat.format(new Date()) + "_" + part.getSubmittedFileName();
 				File f = new File(fSaveDirectory, filename);
 				part.write(f.toString());
-				imagePath = "http://localhost:8080/yokult"+ saveDirectory + "/" + filename;
+				imagePath = "http://35.236.152.197/yokult"+ saveDirectory + "/" + filename;
 				System.out.println("image path: " + imagePath);
 			}
 			respObject.put("msg", "success");
