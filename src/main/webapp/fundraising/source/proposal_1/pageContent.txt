@@ -1,0 +1,44 @@
+<div class="col-lg-8 wow slideInUp" data-wow-delay="0.3s" style="background-color: white">
+                        <h3 style="text-align: center;">
+                            <strong>大家好，我們是築夢志工團第五屆!</strong>
+                        </h3>
+                        <ul>
+                            <li class="article">
+                                <strong>起源</strong>
+                                <strong>
+                                    2016年3月，二十名來自全台各地的高中生經由網路自發募集，組成「築夢教育志工團」，並在2016年4月15日向區域和平志工團申請青年自組團隊資格。我們懷抱熱情和一顆回饋的心，決定前往嘉義偏鄉籌組教育服務營。
+                                </strong>
+                            </li>
+                            <img src="./img/fundraising/picture-1.jpg" class="article">
+                            <li class="article">
+                                <strong>
+                                    嘉義縣為全台灣人口老化最高的城市，隔代教養現象頻繁，容易衍伸認知及價值觀上的差異，相處模式中產生無形的時代隔閡，對於孩子的行為及表現也較容易產生拒絕、失落，甚至是缺乏自信心的問題。
+                                    由於城鄉差距的問題造成學校教育資源的不足，學校學生人數未達教育部輔導師資分配標準，使學習障礙、情緒管理障礙或是自信心不足等特殊孩童無法接受專業的輔導協助，而是和一般小朋友接受一樣的教育模式，更可能因為小朋友對於同儕的”特殊”欠缺認識，產生同儕排擠的情況發生，而這些孩子甚至被孤立，也因為學業上的表現感到自卑、銳減自信心等。
+                                </strong>
+                            </li>
+                            <hr>
+                            <li class="article">
+                                <strong>暑期服務營活動概要：</strong>
+                            </li>
+                            <p class="article">
+                                <strong>名稱：2021築夢志工團暑期教育服務營</strong>
+                            </p>
+                            <p class="article">
+                                <strong>日期：2021年7月6日至7月9日(共四天)</strong>
+                            </p>
+                            <p class="article">
+                                <strong>地點：嘉義縣東石鄉港墘國小、嘉義縣故宮南院</strong>
+                            </p>
+                            <p class="article">
+                                <strong>參與對象：嘉義縣東石鄉港墘國小之小一至小六學生</strong>
+                            </p>
+                            <p class="article">
+                                <strong>活動費用：免費</strong>
+                            </p>
+                            <p class="article">
+                                <strong>參加人數：目前已有45位港墘國小學生報名。</strong>
+                            </p>
+                            <img src="./img/fundraising/picture-2.jpg"" class="article">
+                            <img src="./img/fundraising/picture-3.jpg"" class="article">
+                        </ul>
+                    </div>

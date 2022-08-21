@@ -228,8 +228,7 @@ VALUES
   ('tga000', '醫生', 'doctor@gmail.com', 'a112233445', '1988-01-01','09123456789','','','',''),
   ('tga001', '陳花花', 'flower@gmail.com', 'a223456789', '1999-01-01','0987654399','','7','5','8'),
   ('tga002', '黃泡泡', 'pop@gmail.com', 'a223456788', '1999-01-02','0987654388','','3','3','8'),
-  ('tga003', '林毛毛', 'green@gmail.com', 'a223456787', '1999-01-03','0987654377','','4','9','8'),
-  ('tga004', '王美枝', 'beauty@gmail.com', 'a223456888', '1999-01-04','0987654888','','2','4','8');
+  ('tga003', '林毛毛', 'green@gmail.com', 'a223456787', '1999-01-03','0987654377','','4','9','8');
   
   
 -- 刪除醫師表格 -- 
@@ -977,7 +976,7 @@ insert into `fund_proposal` (
                                     2016年3月，二十名來自全台各地的高中生經由網路自發募集，組成「築夢教育志工團」，並在2016年4月15日向區域和平志工團申請青年自組團隊資格。我們懷抱熱情和一顆回饋的心，決定前往嘉義偏鄉籌組教育服務營。
                                 </strong>
                             </li>
-                            <img src="./img/fundraising/proposal-1/content/price-1_XXX.jpg" class="article">
+                            <img src="./img/fundraising/picture-1.jpg" class="article">
                             <li class="article">
                                 <strong>
                                     嘉義縣為全台灣人口老化最高的城市，隔代教養現象頻繁，容易衍伸認知及價值觀上的差異，相處模式中產生無形的時代隔閡，對於孩子的行為及表現也較容易產生拒絕、失落，甚至是缺乏自信心的問題。
@@ -1006,8 +1005,8 @@ insert into `fund_proposal` (
                             <p class="article">
                                 <strong>參加人數：目前已有45位港墘國小學生報名。</strong>
                             </p>
-                            <img src="./img/fundraising/proposal-1/content/price-2_XXX.jpg" class="article">
-                            <img src="./img/fundraising/proposal-1/content/price-3_XXX.jpg" class="article">
+                            <img src="./img/fundraising/picture-2.jpg"" class="article">
+                            <img src="./img/fundraising/picture-3.jpg"" class="article">
                         </ul>
                     </div>',
 'TGA001'
@@ -1035,7 +1034,7 @@ insert into `fund_proposal` (
                                     2016年3月，二十名來自全台各地的高中生經由網路自發募集，組成「築夢教育志工團」，並在2016年4月15日向區域和平志工團申請青年自組團隊資格。我們懷抱熱情和一顆回饋的心，決定前往嘉義偏鄉籌組教育服務營。
                                 </strong>
                             </li>
-                            <img src="./img/fundraising/proposal-1/content/price-1_XXX.jpg" class="article">
+                            <img src="./img/fundraising/picture-1.jpg" class="article">
                             <li class="article">
                                 <strong>
                                     嘉義縣為全台灣人口老化最高的城市，隔代教養現象頻繁，容易衍伸認知及價值觀上的差異，相處模式中產生無形的時代隔閡，對於孩子的行為及表現也較容易產生拒絕、失落，甚至是缺乏自信心的問題。
@@ -1064,11 +1063,11 @@ insert into `fund_proposal` (
                             <p class="article">
                                 <strong>參加人數：目前已有45位港墘國小學生報名。</strong>
                             </p>
-                            <img src="./img/fundraising/proposal-1/content/price-2_XXX.jpg" class="article">
-                            <img src="./img/fundraising/proposal-1/content/price-3_XXX.jpg" class="article">
+                            <img src="./img/fundraising/picture-2.jpg"" class="article">
+                            <img src="./img/fundraising/picture-3.jpg"" class="article">
                         </ul>
                     </div>',
-'TGA002'
+'TGA001'
 ),
 (
 '環保牙刷計畫 | 刷牙當然也要用最天然的', 
@@ -1093,7 +1092,7 @@ insert into `fund_proposal` (
                                     2016年3月，二十名來自全台各地的高中生經由網路自發募集，組成「築夢教育志工團」，並在2016年4月15日向區域和平志工團申請青年自組團隊資格。我們懷抱熱情和一顆回饋的心，決定前往嘉義偏鄉籌組教育服務營。
                                 </strong>
                             </li>
-                            <img src="./img/fundraising/proposal-1/content/price-1_XXX.jpg" class="article">
+                            <img src="./img/fundraising/picture-1.jpg" class="article">
                             <li class="article">
                                 <strong>
                                     嘉義縣為全台灣人口老化最高的城市，隔代教養現象頻繁，容易衍伸認知及價值觀上的差異，相處模式中產生無形的時代隔閡，對於孩子的行為及表現也較容易產生拒絕、失落，甚至是缺乏自信心的問題。
@@ -1122,11 +1121,11 @@ insert into `fund_proposal` (
                             <p class="article">
                                 <strong>參加人數：目前已有45位港墘國小學生報名。</strong>
                             </p>
-                            <img src="./img/fundraising/proposal-1/content/price-2_XXX.jpg" class="article">
-                            <img src="./img/fundraising/proposal-1/content/price-3_XXX.jpg" class="article">
+                            <img src="./img/fundraising/picture-2.jpg"" class="article">
+                            <img src="./img/fundraising/picture-3.jpg"" class="article">
                         </ul>
                     </div>',
-'TGA002'
+'TGA001'
 );
 
 
@@ -1186,6 +1185,7 @@ create table `fund_post`(
 	`post_SID` int not null comment '縣市流水號',
 	`post_Address` varchar(100) not null comment '寄送地址',
 	`memID` varchar(50) not null comment '會員帳號',
+    `post_Nick_Name` varchar(20) not null comment '收件暱稱',
 	foreign key(`post_SID`) references `Fund_POSTNUMBER`(`post_SID`),
 	foreign key(`memID`) references `MEMBER`(`MEMID`)
 );
@@ -1196,16 +1196,17 @@ insert into `fund_post`(
 	`post_Cellphone`,
 	`post_SID`,
 	`post_Address`,
-	`memID`
+	`memID`,
+    `post_Nick_Name`
 ) values
-('二哥', '關', '0987187187', 24, '北深路二段XX號', 'TGA001'),
-('三哥', '張', '0955123789', 24, '埔新街XX號', 'TGA002'),
-('四哥', '李', '0955123789', 24, '文化街XX號', 'TGA003'),
-('五哥', '陳', '0955789111', 24, '文化街Z1號', 'TGA004'),
-('六哥', '王', '0955789122', 24, '文化街Z2號', 'TGA005'),
-('七哥', '林', '0955789133', 24, '文化街Z3號', 'TGA001'),
-('八哥', '吳', '0955789144', 24, '文化街Z4號', 'TGA002'),
-('九哥', '許', '0955789155', 24, '文化街Z5號', 'TGA003');
+('二哥', '關', '0987187187', 24, '北深路二段XX號', 'TGA001', '小關的家'),
+('三哥', '張', '0955123789', 24, '埔新街XX號', 'TGA002', '飛哥的家'),
+('四哥', '李', '0955123789', 24, '文化街XX號', 'TGA003', '老李'),
+('五哥', '陳', '0955789111', 24, '文化街Z1號', 'TGA004', '小陳'),
+('六哥', '王', '0955789122', 24, '文化街Z2號', 'TGA005', '隔壁老王'),
+('七哥', '林', '0955789133', 24, '文化街Z3號', 'TGA001', '七爺'),
+('八哥', '吳', '0955789144', 24, '文化街Z4號', 'TGA002', '九官鳥大哥'),
+('九哥', '許', '0955789155', 24, '文化街Z5號', 'TGA003', '台北許先生');
 
 
 -- 建立訂單資料

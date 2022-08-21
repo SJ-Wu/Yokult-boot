@@ -44,6 +44,17 @@ public class PostDaoSpringmvc implements PostDao {
 		if(id != null && id > 0 && postBean != null && postBean.getPostID() == null) {			
 			PostBean update = this.session.get(PostBean.class, id);
 			if(update != null) {
+				update.setPostFisrtName(postBean.getPostFisrtName());
+				update.setPostLastName(postBean.getPostLastName());
+				update.setPostCellphone(postBean.getPostCellphone());
+				update.setPost_SID(postBean.getPost_SID());
+				update.setPostAddress(postBean.getPostAddress());
+				update.setMemID(postBean.getMemID());
+				update.setPostNickName(postBean.getPostNickName());
+				update.setPostCity(postBean.getPostCity());
+				update.setPostArea(postBean.getPostArea());
+				update.setPostNumber(postBean.getPostNumber());
+				
 				this.session.save(update);
 				return update;				
 			}

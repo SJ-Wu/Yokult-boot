@@ -33,4 +33,12 @@ public class PostNumberDaoSpringmvc implements PostNumberDao {
 		return result;
 	}
 	
+
+	@Override
+	public PostNumberBean selectSID(String postCity , String postArea) {
+		Query<PostNumberBean> qurey = this.session.createQuery("from PostNumberBean where postCity = \'" + postCity + "\' and postArea = \'" + postArea + "\'", PostNumberBean.class);
+		PostNumberBean result = qurey.getSingleResult();
+		return result;
+	}
+	
 }
