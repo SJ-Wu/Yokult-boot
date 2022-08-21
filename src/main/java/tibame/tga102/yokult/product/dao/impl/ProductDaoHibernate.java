@@ -54,13 +54,14 @@ public class ProductDaoHibernate implements ProductDao {
 		if (category != null || productName != null) {
 			hql += " where";
 			if (category != null) {
-				hql += " procategory = :cate";
+				hql += " proCategory = :cate";
 			}
 			if (productName != null) {
 				if (category == null) {
-					hql += " proname like :name";
+					hql += " proName like :name";
+				} else {					
+					hql += " and proName like :name";
 				}
-				hql += " and proname = :name";
 			}
 		}
 		System.out.println("hql= " + hql);
